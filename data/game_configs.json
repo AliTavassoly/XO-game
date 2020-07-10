@@ -1,0 +1,8 @@
+{
+  "boardCols": 7,
+  "boardRows": 7,
+  "cellWidth": 50,
+  "cellHeight": 50,
+  "gameFrameWidth": 500,
+  "gameFrameHeight": 500
+}
