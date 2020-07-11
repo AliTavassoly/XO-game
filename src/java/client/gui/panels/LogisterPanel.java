@@ -1,11 +1,12 @@
 package client.gui.panels;
 
-import client.Main;
+import client.ClientMain;
 import client.gui.GameFrame;
 import client.gui.xocontrols.XOButton;
 import client.gui.xocontrols.XOJTextField;
 import data.Configs;
 import data.DataBase;
+import server.model.Player;
 import util.ImageLoader;
 import util.XOException;
 
@@ -61,19 +62,23 @@ public class LogisterPanel extends JPanel {
     }
 
     private void makeButtons() {
-        loginButton = new XOButton("Login");
+        loginButton = new XOButton(100, 40, "Login");
+        loginButton.setFont(GameFrame.getCustomFont(0));
 
-        registerButton = new XOButton("Register");
+        registerButton = new XOButton(100, 40,"Register");
+        registerButton.setFont(GameFrame.getCustomFont(0));
 
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    Main.login(userField.getText(), passwordField.getText());
+                    ClientMain.login(userField.getText(), passwordField.getText());
 
                     DataBase.save();
 
-                    GameFrame.switchPanelTo(new MainMenuPanel());
+                    GameFrame.switchPanelTo(new GamePanel(new Player(ClientMain.currentAccount, 'X'),
+                            new Player(ClientMain.currentAccount, 'O')));
+//                    GameFrame.switchPanelTo(new MainMenuPanel());
                 } catch (XOException xoException){
                     error = xoException.getMessage();
                 } catch (Exception e){
@@ -86,7 +91,7 @@ public class LogisterPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    Main.register(userField.getText(), passwordField.getText());
+                    ClientMain.register(userField.getText(), passwordField.getText());
                     DataBase.save();
                 } catch (XOException xoException){
                     error = xoException.getMessage();
@@ -100,11 +105,17 @@ public class LogisterPanel extends JPanel {
     private void makeLabels() {
         userLabel = new JLabel("Username:");
         passwordLabel = new JLabel("Password:");
+
+        userLabel.setFont(GameFrame.getCustomFont(0));
+        passwordLabel.setFont(GameFrame.getCustomFont(0));
     }
 
     private void makeFields() {
         userField = new XOJTextField(10);
         passwordField = new XOJTextField(10);
+
+        userField.setFont(GameFrame.getCustomFont(0));
+        passwordField.setFont(GameFrame.getCustomFont(0));
     }
 
     private void layoutComponent() {

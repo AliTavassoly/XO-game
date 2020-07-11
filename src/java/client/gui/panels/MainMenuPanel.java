@@ -1,6 +1,6 @@
 package client.gui.panels;
 
-import client.Main;
+import client.ClientMain;
 import client.gui.GameFrame;
 import client.gui.xocontrols.XOButton;
 import data.Configs;
@@ -46,12 +46,16 @@ public class MainMenuPanel extends JPanel{
 
     private void makeButtons() {
         multiPlayer = new XOButton("Multiplayer");
+        multiPlayer.setFont(GameFrame.getCustomFont(0));
 
         status = new XOButton("Status");
+        status.setFont(GameFrame.getCustomFont(0));
 
         scoreBoard = new XOButton("Scoreboard");
+        scoreBoard.setFont(GameFrame.getCustomFont(0));
 
         logout = new XOButton("Logout");
+        logout.setFont(GameFrame.getCustomFont(0));
 
         multiPlayer.addActionListener(new ActionListener() {
             @Override
@@ -77,7 +81,7 @@ public class MainMenuPanel extends JPanel{
         logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Main.logout(Main.currentAccount.getUsername());
+                ClientMain.logout();
                 GameFrame.switchPanelTo(new LogisterPanel());
             }
         });

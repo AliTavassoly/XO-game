@@ -9,10 +9,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GameBoardPanel extends JPanel {
+public class BoardPanel extends JPanel {
     private Cell[][] cells;
 
-    public GameBoardPanel(){
+    public BoardPanel(){
         configGameBoard();
 
         makeBoard();
