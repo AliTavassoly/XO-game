@@ -1,17 +1,17 @@
 package client.gui;
 
-import client.gui.panels.GameBoardPanel;
-import client.gui.panels.GamePanel;
 import client.gui.panels.LogisterPanel;
 import data.Configs;
+import util.FontLoader;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.TimerTask;
 
 public class GameFrame extends JFrame {
     private static GameFrame instance;
 
-    private GameFrame(){
+    private GameFrame() {
         configFrame();
 
         createAndRunFrameUpdater();
@@ -32,8 +32,8 @@ public class GameFrame extends JFrame {
         timer.schedule(task, delay, period);
     }
 
-    public static GameFrame getInstance(){
-        if(instance == null)
+    public static GameFrame getInstance() {
+        if (instance == null)
             instance = new GameFrame();
         return instance;
     }
@@ -56,5 +56,17 @@ public class GameFrame extends JFrame {
     public static void switchPanelTo(JPanel panel) {
         instance.getContentPane().setVisible(false);
         instance.setContentPane(panel);
+    }
+
+    public static Font getCustomFont(int style, int size) {
+        Font font = null;
+        font = FontLoader.getInstance().getFont("/font.ttf");
+        return font.deriveFont(style, size);
+    }
+
+    public static Font getCustomFont(int style) {
+        Font font = null;
+        font = FontLoader.getInstance().getFont("/font.ttf");
+        return font.deriveFont(style, 20);
     }
 }

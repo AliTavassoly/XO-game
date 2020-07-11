@@ -6,7 +6,7 @@ import data.DataBase;
 import server.model.Account;
 import server.model.Player;
 
-public class Main {
+public class ClientMain {
     public static Account currentAccount;
     public static Player currentPlayer;
 
@@ -20,7 +20,7 @@ public class Main {
         currentAccount = Data.getAccount(username);
     }
 
-    public static void logout(String username){
+    public static void logout(){
         currentAccount = null;
         currentPlayer = null;
     }
