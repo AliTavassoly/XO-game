@@ -1,8 +1,10 @@
 {
   "boardCols": 7,
   "boardRows": 7,
-  "cellWidth": 50,
-  "cellHeight": 50,
+  "cellWidth": 35,
+  "cellHeight": 35,
   "gameFrameWidth": 500,
-  "gameFrameHeight": 500
+  "gameFrameHeight": 500,
+  "shapeInGameWidth": 70,
+  "shapeInGameHeight": 70
 }
