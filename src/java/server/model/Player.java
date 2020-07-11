@@ -1,12 +1,12 @@
 package server.model;
 
 public class Player {
-    private String myShape;
+    private Character shape;
     private Account account;
 
-    public Player(Account account, String myShape) {
+    public Player(Account account, Character shape) {
         this.account = account;
-        this.myShape = myShape;
+        this.shape = shape;
     }
 
     public Account getAccount() {
@@ -17,11 +17,11 @@ public class Player {
         this.account = account;
     }
 
-    public String getMyShape() {
-        return myShape;
+    public Character getShape() {
+        return shape;
     }
 
-    public void setMyShape(String myShape) {
-        this.myShape = myShape;
+    public void setShape(Character shape) {
+        this.shape = shape;
     }
 }

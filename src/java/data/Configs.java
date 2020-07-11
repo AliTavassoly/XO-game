@@ -12,6 +12,9 @@ public class Configs {
     public static int cellWidth;
     public static int cellHeight;
 
+    public static int shapeInGameWidth;
+    public static int shapeInGameHeight;
+
     static public void setConfigs(Map<String, Object> configs) {
         boardRows = ((Double) configs.get("boardRows")).intValue();
         boardCols = ((Double) configs.get("boardCols")).intValue();
@@ -21,5 +24,8 @@ public class Configs {
 
         gameFrameWidth = ((Double) configs.get("gameFrameWidth")).intValue();
         gameFrameHeight = ((Double) configs.get("gameFrameHeight")).intValue();
+
+        shapeInGameWidth = ((Double) configs.get("shapeInGameWidth")).intValue();
+        shapeInGameHeight = ((Double) configs.get("shapeInGameHeight")).intValue();
     }
 }

@@ -21,6 +21,8 @@ public class ImageLoader {
     }
 
     public BufferedImage getImage(String path) {
+        path = "/images" + path;
+
         if (!imageMap.containsKey(path)) {
             try {
                 imageMap.put(path, ImageIO.read(this.getClass().getResourceAsStream(path)));
