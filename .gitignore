@@ -1,4 +1,5 @@
 # Project exclude paths
 /out/
 .idea
-data/accounts.json
+data
+!data/game_configs.json
