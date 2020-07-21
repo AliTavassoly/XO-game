@@ -2,4 +2,3 @@
 /out/
 .idea
 data
-!data/game_configs.json
