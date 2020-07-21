@@ -1,4 +1,4 @@
-package util;
+package client.gui.util;
 
 import java.awt.*;
 import java.io.BufferedInputStream;

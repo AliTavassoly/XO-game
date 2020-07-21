@@ -1,6 +1,6 @@
 package client.gui.panels;
 
-import util.ImageLoader;
+import client.gui.util.ImageLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,5 +55,9 @@ public class ShapePanel extends JPanel {
                     width, height,
                     null);
         }
+    }
+
+    public void changeStatus(){
+        status = !status;
     }
 }

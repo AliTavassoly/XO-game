@@ -1,4 +1,4 @@
-package util;
+package client.gui.util;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

@@ -3,7 +3,7 @@ package client.gui.panels;
 import client.gui.GameFrame;
 import client.gui.xocontrols.XOButton;
 import data.Configs;
-import server.model.Player;
+import model.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +37,7 @@ public class GamePanel extends JPanel {
 
         layoutComponent();
     }
-
+   
     private void customizeLabels() {
         int labelsWidth = ((int)board.getPreferredSize().getWidth() - 2 * (int)myShape.getPreferredSize().getWidth()) / 2;
         int labelsHeight = (int)myShape.getPreferredSize().getHeight();
@@ -72,16 +72,21 @@ public class GamePanel extends JPanel {
     }
 
     private void makeLabels() {
-        myUserLabel = new JLabel(myPlayer.getAccount().getUsername());
+        myUserLabel = new JLabel(myPlayer.getUsername());
         myUserLabel.setFont(GameFrame.getCustomFont(0));
 
-        enemyUserLabel = new JLabel(enemyPlayer.getAccount().getUsername());
+        enemyUserLabel = new JLabel(enemyPlayer.getUsername());
         enemyUserLabel.setFont(GameFrame.getCustomFont(0));
     }
 
     private void makeShapes(){
         myShape = new ShapePanel(Configs.shapeInGameWidth, Configs.shapeInGameHeight, myPlayer.getShape());
         enemyShape = new ShapePanel(Configs.shapeInGameWidth, Configs.shapeInGameHeight, enemyPlayer.getShape());
+
+        if(myPlayer.isMyTurn())
+            myShape.setStatus(true);
+        else
+            enemyShape.setStatus(true);
     }
 
     private void layoutComponent() {

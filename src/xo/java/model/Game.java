@@ -1,17 +1,12 @@
-package server;
+package model;
 
 import data.Configs;
-import server.model.Player;
 
 public class Game {
-    private Player player0, player1;
     private Character [][] board;
     private int boardCols, boardRows, winCondition;
 
-    public Game(Player player0, Player player1){
-        this.player0 = player0;
-        this.player1 = player1;
-
+    public Game(){
         boardRows = Configs.boardRows;
         boardCols = Configs.boardCols;
 

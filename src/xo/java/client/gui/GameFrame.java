@@ -2,7 +2,7 @@ package client.gui;
 
 import client.gui.panels.LogisterPanel;
 import data.Configs;
-import util.FontLoader;
+import client.gui.util.FontLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,8 +47,8 @@ public class GameFrame extends JFrame {
 
         this.setContentPane(new LogisterPanel());
 
-        setUndecorated(true);
-        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        //setUndecorated(true);
+        //getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 
         this.setVisible(true);
     }

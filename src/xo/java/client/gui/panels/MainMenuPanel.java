@@ -1,10 +1,10 @@
 package client.gui.panels;
 
-import client.ClientMain;
+import client.XOClient;
 import client.gui.GameFrame;
 import client.gui.xocontrols.XOButton;
 import data.Configs;
-import util.ImageLoader;
+import client.gui.util.ImageLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,7 +81,7 @@ public class MainMenuPanel extends JPanel{
         logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                ClientMain.logout();
+                XOClient.logout();
                 GameFrame.switchPanelTo(new LogisterPanel());
             }
         });

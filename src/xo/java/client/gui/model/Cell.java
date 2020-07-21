@@ -2,7 +2,7 @@ package client.gui.model;
 
 import client.gui.xocontrols.XOButton;
 import data.Configs;
-import util.ImageLoader;
+import client.gui.util.ImageLoader;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

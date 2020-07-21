@@ -1,13 +1,13 @@
 package client.gui.panels;
 
 import client.ClientMain;
+import client.XOClient;
 import client.gui.GameFrame;
 import client.gui.xocontrols.XOButton;
 import client.gui.xocontrols.XOJTextField;
 import data.Configs;
 import data.DataBase;
-import server.model.Player;
-import util.ImageLoader;
+import client.gui.util.ImageLoader;
 import util.XOException;
 
 import javax.swing.*;
@@ -72,13 +72,12 @@ public class LogisterPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    ClientMain.login(userField.getText(), passwordField.getText());
+                    ClientMain.client.login(userField.getText(), passwordField.getText());
 
                     DataBase.save();
 
-                    GameFrame.switchPanelTo(new GamePanel(new Player(ClientMain.currentAccount, 'X'),
-                            new Player(ClientMain.currentAccount, 'O')));
-//                    GameFrame.switchPanelTo(new MainMenuPanel());
+//                    GameFrame.switchPanelTo(new GamePanel());
+                    GameFrame.switchPanelTo(new MainMenuPanel());
                 } catch (XOException xoException){
                     error = xoException.getMessage();
                 } catch (Exception e){
@@ -91,7 +90,7 @@ public class LogisterPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    ClientMain.register(userField.getText(), passwordField.getText());
+                    XOClient.register(userField.getText(), passwordField.getText());
                     DataBase.save();
                 } catch (XOException xoException){
                     error = xoException.getMessage();

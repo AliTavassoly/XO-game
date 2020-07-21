@@ -1,6 +1,5 @@
 package client.gui.panels;
 
-import client.ClientMapper;
 import client.gui.model.Cell;
 import data.Configs;
 
