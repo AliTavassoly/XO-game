@@ -1,8 +1,15 @@
 package xo.server;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import xo.data.Data;
+import xo.data.DataBase;
+import xo.model.Packet;
 import xo.model.Player;
 
 import java.io.IOException;
@@ -13,19 +20,9 @@ public class ClientHandler extends Thread{
     private XOServer server;
     private Socket socket;
 
-    private Gson gson;
-
     public ClientHandler(XOServer server, Socket socket){
         this.server = server;
         this.socket = socket;
-
-        makeGson();
-    }
-
-    private void makeGson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        //gsonBuilder.registerTypeAdapter(Player.class, new AbstractAdapter<Player>());
-        gson = gsonBuilder.create();
     }
 
     @Override
@@ -36,16 +33,27 @@ public class ClientHandler extends Thread{
                 System.out.println("started to read ... : ");
                 String message = scanner.nextLine();
                 System.out.println(message);
-                /*Object object = gson.fromJson(message, Object.class);
-                System.out.println("received obj: " + object);*/
+
+                Packet object = Data.getGson().fromJson(message, Packet.class);
+                System.out.println("received obj: " + object);
+                System.out.println("username: " +  object.getFunctionName());
+                System.out.println("username: " +  object.getArgs().length);
+                System.out.println("arg1: " +  object.getArgs()[0]);
+                System.out.println("arg2: " +  object.getArgs()[1]);
+                System.out.println("arg3: " +  object.getArgs()[2]);
+
+                int integer =  (int)object.getArgs()[0];
+                System.out.println("int: " + integer);
+
+                String string = (String) object.getArgs()[1];
+                System.out.println("string: " + string);
+
+                char[][] characters = (char[][])object.getArgs()[2];
 
                 //System.out.println("cast: " + (Player)object);
 
-                JsonParser parser = new JsonParser();
-                Object object = parser.parse(message);
-                System.out.println("object :" + object);
-                System.out.println("cast :" + (Player)object);
-
+               /* ObjectMapper mapper = DataBase.getMapper();
+                Object object = mapper.readValue(message, Object.class);*/
             }
         } catch (IOException ioException){
             ioException.printStackTrace();

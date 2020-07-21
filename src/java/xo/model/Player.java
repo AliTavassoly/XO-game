@@ -1,7 +1,10 @@
 package xo.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.io.Serializable;
 
+//@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "BTRFSPhysicalLocationItem")
 public class Player implements Serializable {
     private String username;
     private Character shape;
