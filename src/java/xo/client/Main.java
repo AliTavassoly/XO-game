@@ -1,13 +1,13 @@
 package xo.client;
 
-public class ClientMain {
+public class Main {
     static String serverIP = "localhost";
     static int serverPort = 8000;
 
     public static XOClient client;
 
     public static void main(String[] args) {
-        client = new XOClient(serverIP, serverPort);
+        client = XOClient.makeInstance(serverIP, serverPort);
         client.start();
     }
 }

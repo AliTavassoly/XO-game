@@ -55,16 +55,17 @@ public class Data {
     }
 
     public synchronized static ObjectMapper getMapper(){
-        /*ObjectMapper mapper = new ObjectMapper();
-        mapper.enableDefaultTyping();*/
-        PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator
+        ObjectMapper mapper = new ObjectMapper();
+        //mapper.enableDefaultTyping();
+        mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.EVERYTHING);
+        /*PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator
                 .builder()
                 .allowIfBaseType("xo")
                 .build();
 
         ObjectMapper mapper = JsonMapper.builder()
                 .activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL)
-                .build();
+                .build();*/
 
         return mapper;
     }

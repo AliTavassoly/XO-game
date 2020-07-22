@@ -11,6 +11,9 @@ public class Account {
     private int lostGames;
     private int point;
 
+    public Account() {
+    }
+
     public Account(int id, String username, String password) {
         this.id = id;
 

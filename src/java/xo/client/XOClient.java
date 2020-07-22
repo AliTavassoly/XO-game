@@ -1,9 +1,14 @@
 package xo.client;
 
 import xo.client.gui.GameFrame;
+import xo.client.gui.panels.BoardPanel;
+import xo.client.gui.panels.GamePanel;
+import xo.client.network.Receiver;
+import xo.client.network.Sender;
 import xo.data.Data;
 import xo.data.DataBase;
 import xo.model.Account;
+import xo.model.Packet;
 import xo.model.Player;
 
 import java.io.IOException;
@@ -12,16 +17,17 @@ import java.io.PrintStream;
 import java.net.Socket;
 
 public class XOClient extends Thread{
-    public static Account currentAccount;
-    public static Player currentPlayer;
+    private static XOClient instance;
+
+    public Account currentAccount;
+    public Player currentPlayer;
+    public GamePanel currentGamePanel;
 
     private Socket socket;
-    private ClientReceiver receiver;
-    private ClientSender sender;
+    private Receiver receiver;
+    private Sender sender;
 
-    private int authToken;
-
-    public XOClient(String serverIP, int serverPort){
+    private XOClient(String serverIP, int serverPort){
         try{
             this.socket = new Socket(serverIP, serverPort);
             System.out.println("Connected to Server at: " + serverIP + ":" + serverPort);
@@ -33,19 +39,16 @@ public class XOClient extends Thread{
         }
     }
 
-    public static void login(String username, String password) throws Exception {
-        //Data.checkAccount(username, password);
-        currentAccount = Data.getAccount(username);
+    public static XOClient makeInstance(String serverIP, int serverPort){
+        return instance = new XOClient(serverIP, serverPort);
     }
 
-    public static void register(String username, String password) throws Exception {
-        //Data.addAccount(username, password);
-        currentAccount = Data.getAccount(username);
+    public static XOClient getInstance(){
+        return instance;
     }
 
-    public static void logout(){
-        currentAccount = null;
-        currentPlayer = null;
+    public GamePanel getCurrentGamePanel(){
+        return currentGamePanel;
     }
 
     @Override
@@ -54,19 +57,28 @@ public class XOClient extends Thread{
             InputStream socketInputStream = socket.getInputStream();
             PrintStream socketPrinter = new PrintStream(socket.getOutputStream());
 
-            receiver = new ClientReceiver(socketInputStream);
-            sender = new ClientSender(socketPrinter);
+            receiver = new Receiver(socketInputStream);
+            sender = new Sender(socketPrinter);
 
             receiver.start();
-            sender.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        receiver.interrupt();
     }
 
-    private boolean isStillAlive() {
-        return (socket.isConnected() && sender.isAlive());
+    public void setCurrentAccount(Account account){
+        currentAccount = account;
+    }
+
+    public void setCurrentPlayer(Player player){
+        currentPlayer = player;
+    }
+
+    public void setCurrentGamePanel(GamePanel gamePanel){
+        currentGamePanel = gamePanel;
+    }
+
+    public static void sendPacket(Packet packet){
+        getInstance().sender.sendPacket(packet);
     }
 }

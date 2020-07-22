@@ -1,5 +1,6 @@
 package xo.client.gui.panels;
 
+import xo.client.Mapper;
 import xo.client.XOClient;
 import xo.client.gui.GameFrame;
 import xo.client.gui.xocontrols.XOButton;
@@ -81,7 +82,7 @@ public class MainMenuPanel extends JPanel{
         logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                XOClient.logout();
+                Mapper.logout();
                 GameFrame.switchPanelTo(new LogisterPanel());
             }
         });

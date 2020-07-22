@@ -59,4 +59,12 @@ public class BoardPanel extends JPanel {
     public void mark(Character character, int i, int j){
         cells[i][j].setValue(character);
     }
+
+    public void updateBoard(char[][] board){
+        for(int i = 0; i < Configs.boardRows; i++){
+            for(int j = 0; j < Configs.boardCols; j++){
+                cells[i][j].setValue(board[i][j]);
+            }
+        }
+    }
 }

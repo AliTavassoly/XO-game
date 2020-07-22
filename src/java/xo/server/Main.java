@@ -1,6 +1,6 @@
 package xo.server;
 
-public class ServerMain {
+public class Main {
     static int serverPort = 8000;
 
     public static void main(String[] args) {

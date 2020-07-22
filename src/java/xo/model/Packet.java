@@ -18,6 +18,10 @@ public class Packet {
         this.args = args;
     }
 
+    public Packet(){
+
+    }
+
     public Packet(String functionName, Object[] args){
         this.functionName = functionName;
         this.args = args;

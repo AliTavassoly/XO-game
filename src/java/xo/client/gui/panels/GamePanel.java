@@ -17,7 +17,7 @@ public class GamePanel extends JPanel {
 
     private Player myPlayer, enemyPlayer;
 
-    private BoardPanel board;
+    private BoardPanel boardPanel;
 
     public GamePanel(Player myPlayer, Player enemyPlayer){
         this.myPlayer = myPlayer;
@@ -39,7 +39,7 @@ public class GamePanel extends JPanel {
     }
    
     private void customizeLabels() {
-        int labelsWidth = ((int)board.getPreferredSize().getWidth() - 2 * (int)myShape.getPreferredSize().getWidth()) / 2;
+        int labelsWidth = ((int) boardPanel.getPreferredSize().getWidth() - 2 * (int)myShape.getPreferredSize().getWidth()) / 2;
         int labelsHeight = (int)myShape.getPreferredSize().getHeight();
 
         myUserLabel.setPreferredSize(new Dimension(labelsWidth, labelsHeight));
@@ -52,7 +52,7 @@ public class GamePanel extends JPanel {
     }
 
     private void makeBoard() {
-        board = new BoardPanel();
+        boardPanel = new BoardPanel();
     }
 
     private void configPanel() {
@@ -119,12 +119,18 @@ public class GamePanel extends JPanel {
         grid.gridy = 1;
         grid.gridwidth = 4;
         grid.insets = new Insets(20, 0, 0, 0);
-        add(board, grid);
+        add(boardPanel, grid);
 
         // third row
         grid.gridx = 0;
         grid.gridy = 2;
         grid.gridwidth = 4;
         add(surrenderButton, grid);
+    }
+
+    public void updateGame(char[][] newBoard){
+        boardPanel.updateBoard(newBoard);
+        revalidate();
+        repaint();
     }
 }

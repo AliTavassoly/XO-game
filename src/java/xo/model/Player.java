@@ -31,6 +31,10 @@ public class Player implements Serializable {
         isMyTurn = myTurn;
     }
 
+    public Player(){
+
+    }
+
     public Player(String username, Character shape, boolean isMyTurn){
         this.username = username;
         this.shape = shape;
