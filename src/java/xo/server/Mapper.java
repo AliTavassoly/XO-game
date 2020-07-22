@@ -1,15 +1,32 @@
 package xo.server;
 
-public class Mapper {
-    private static Mapper instance;
+import xo.model.Packet;
 
-    private Mapper(){
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+public class Mapper {
+    public static void login(String username, String password, ClientHandler clientHandler){
 
     }
 
-    public static Mapper getInstance(){
-        if(instance == null)
-            instance = new Mapper();
-        return instance;
+    public static void register(String username, String password, ClientHandler clientHandler){
+
+    }
+
+    public static void logout(ClientHandler clientHandler){
+    }
+
+    public static void invokeFunction(Packet packet) {
+        for (Method method : xo.client.Mapper.class.getMethods()) {
+            if (method.getName().equals(packet.getFunctionName())) {
+                try {
+                    method.invoke(null, packet.getArgs());
+                    break;
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

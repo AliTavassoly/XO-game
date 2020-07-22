@@ -1,6 +1,7 @@
 package xo.client.network;
 
 import xo.data.Data;
+import xo.model.Packet;
 
 import java.io.PrintStream;
 
@@ -11,11 +12,11 @@ public class Sender{
         this.printStream = printStream;
     }
 
-    public void sendPacket(Object object) {
+    public void sendPacket(Packet packet) {
         try {
             String objectString;
 
-            objectString = Data.getMapper().writeValueAsString(object);
+            objectString = Data.getMapper().writeValueAsString(packet);
             System.out.println(objectString);
 
             printStream.println(objectString);

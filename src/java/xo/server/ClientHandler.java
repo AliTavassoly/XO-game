@@ -6,6 +6,7 @@ import xo.model.Packet;
 import xo.model.Player;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -30,36 +31,26 @@ public class ClientHandler extends Thread{
                 System.out.println(message);
 
                 ObjectMapper mapper = Data.getMapper();
-                Object object = mapper.readValue(message, Object.class);
-                //System.out.println();
 
-                Packet packet = (Packet)object;
+                Packet packet = (Packet)mapper.readValue(message, Object.class);
 
-                for(Method method: this.getClass().getMethods()){
-                    if(method.getName().equals(packet.getFunctionName())){
-                        System.out.println("Method found ...");
-                        try {
-                            method.invoke(null, packet.getArgs());
-                        } catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
+                Mapper.invokeFunction(packet);
             }
         } catch (IOException ioException){
             ioException.printStackTrace();
         }
     }
 
-    public void sendPacket(){
+    public void sendPacket(Packet packet) {
+        try {
+            String objectString;
 
-    }
+            objectString = Data.getMapper().writeValueAsString(packet);
+            System.out.println(objectString);
 
-    public static void temp(double a, String b, char[][] c, Player p){
-        System.out.println("int temp: " + a);
-        System.out.println("int temp: " + b);
-        System.out.println("int temp: " + c[0][0]);
-        System.out.println("int temp: " + p);
+            new PrintStream(socket.getOutputStream()).println(objectString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
