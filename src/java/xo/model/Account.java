@@ -11,14 +11,13 @@ public class Account {
     private int lostGames;
     private int point;
 
-    public Account() {
+    private int authToken;
+
+    public void setAuthToken(int authToken){
+        this.authToken = authToken;
     }
-
-    public Account(int id, String username, String password) {
-        this.id = id;
-
-        this.username = username;
-        this.password = password;
+    public int getAuthToken(){
+        return authToken;
     }
 
     public String getUsername() {
@@ -68,6 +67,16 @@ public class Account {
     }
     public void setPoint(int point) {
         this.point = point;
+    }
+
+    public Account() {
+    }
+
+    public Account(int id, String username, String password) {
+        this.id = id;
+
+        this.username = username;
+        this.password = password;
     }
 
     public void lostGame(){

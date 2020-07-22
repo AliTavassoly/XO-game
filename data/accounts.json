@@ -1,1 +1,52 @@
-{}
+{
+  "ali": {
+    "id": 0,
+    "username": "ali",
+    "password": "ali",
+    "totalGames": 0,
+    "winGames": 0,
+    "lostGames": 0,
+    "point": 0,
+    "authToken": -1795976895
+  },
+  "f": {
+    "id": 1,
+    "username": "f",
+    "password": "f",
+    "totalGames": 0,
+    "winGames": 0,
+    "lostGames": 0,
+    "point": 0,
+    "authToken": 259464974
+  },
+  "g": {
+    "id": 2,
+    "username": "g",
+    "password": "g",
+    "totalGames": 0,
+    "winGames": 0,
+    "lostGames": 0,
+    "point": 0,
+    "authToken": 0
+  },
+  "af": {
+    "id": 3,
+    "username": "af",
+    "password": "af",
+    "totalGames": 0,
+    "winGames": 0,
+    "lostGames": 0,
+    "point": 0,
+    "authToken": 0
+  },
+  "afa": {
+    "id": 4,
+    "username": "afa",
+    "password": "afa",
+    "totalGames": 0,
+    "winGames": 0,
+    "lostGames": 0,
+    "point": 0,
+    "authToken": 0
+  }
+}

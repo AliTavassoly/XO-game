@@ -19,6 +19,10 @@ public class GamePanel extends JPanel {
 
     private BoardPanel boardPanel;
 
+    public Player getMyPlayer(){
+        return myPlayer;
+    }
+
     public GamePanel(Player myPlayer, Player enemyPlayer){
         this.myPlayer = myPlayer;
         this.enemyPlayer = enemyPlayer;
@@ -52,7 +56,7 @@ public class GamePanel extends JPanel {
     }
 
     private void makeBoard() {
-        boardPanel = new BoardPanel();
+        boardPanel = new BoardPanel(this);
     }
 
     private void configPanel() {

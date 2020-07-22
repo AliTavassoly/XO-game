@@ -6,6 +6,8 @@ import xo.client.gui.util.FontLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.TimerTask;
 
 public class GameFrame extends JFrame {
@@ -14,7 +16,21 @@ public class GameFrame extends JFrame {
     private GameFrame() {
         configFrame();
 
+        makeMouseListener();
+
         createAndRunFrameUpdater();
+    }
+
+    private void makeMouseListener() {
+        this.addMouseMotionListener(new MouseMotionListener() {
+            public void mouseDragged(MouseEvent mouseEvent) {
+                GameFrame.this.setLocation(
+                        (int)mouseEvent.getLocationOnScreen().getX() - Configs.gameFrameWidth / 2,
+                        (int)mouseEvent.getLocationOnScreen().getY() - Configs.gameFrameHeight / 2
+                        );
+            }
+            public void mouseMoved(MouseEvent mouseEvent) { }
+        });
     }
 
     private void createAndRunFrameUpdater() {
@@ -47,8 +63,8 @@ public class GameFrame extends JFrame {
 
         this.setContentPane(new LogisterPanel());
 
-        //setUndecorated(true);
-        //getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        setUndecorated(true);
+        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 
         this.setVisible(true);
     }

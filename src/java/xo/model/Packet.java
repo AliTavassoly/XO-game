@@ -3,6 +3,7 @@ package xo.model;
 public class Packet {
     private String functionName;
     private Object[] args;
+    private int authToken;
 
     public String getFunctionName() {
         return functionName;
@@ -16,6 +17,13 @@ public class Packet {
     }
     public void setArgs(Object[] args) {
         this.args = args;
+    }
+
+    public int getAuthToken() {
+        return authToken;
+    }
+    public void setAuthToken(int authToken) {
+        this.authToken = authToken;
     }
 
     public Packet(){

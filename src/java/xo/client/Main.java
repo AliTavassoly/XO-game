@@ -1,5 +1,8 @@
 package xo.client;
 
+import xo.data.DataBase;
+import xo.model.XOClient;
+
 public class Main {
     static String serverIP = "localhost";
     static int serverPort = 8000;
@@ -7,7 +10,13 @@ public class Main {
     public static XOClient client;
 
     public static void main(String[] args) {
-        client = XOClient.makeInstance(serverIP, serverPort);
+        try {
+            DataBase.load();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        client = XOClient.makeNewInstance(serverIP, serverPort);
+        //client.start();
         client.start();
     }
 }

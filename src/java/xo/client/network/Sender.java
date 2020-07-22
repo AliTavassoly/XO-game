@@ -16,7 +16,10 @@ public class Sender{
         try {
             String objectString;
 
+            System.out.println("salam start");
             objectString = Data.getMapper().writeValueAsString(packet);
+            System.out.println("salam end");
+
             System.out.println(objectString);
 
             printStream.println(objectString);

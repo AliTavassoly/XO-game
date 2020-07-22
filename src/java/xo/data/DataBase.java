@@ -60,8 +60,12 @@ public class DataBase {
         fileWriter.close();
     }
 
-    public static void save() throws Exception{
-        saveAccounts();
+    public static void save(){
+        try {
+            saveAccounts();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void load() throws Exception{

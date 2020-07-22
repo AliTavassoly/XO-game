@@ -1,5 +1,6 @@
 package xo.client.gui.panels;
 
+import xo.client.Mapper;
 import xo.client.gui.model.Cell;
 import xo.data.Configs;
 
@@ -10,8 +11,11 @@ import java.awt.event.ActionListener;
 
 public class BoardPanel extends JPanel {
     private Cell[][] cells;
+    private GamePanel gamePanel;
 
-    public BoardPanel(){
+    public BoardPanel(GamePanel gamePanel){
+        this.gamePanel = gamePanel;
+
         configGameBoard();
 
         makeBoard();
@@ -23,7 +27,9 @@ public class BoardPanel extends JPanel {
         cell.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                if(gamePanel.getMyPlayer().isMyTurn()){
+                    Mapper.sendMarkCell(gamePanel.getMyPlayer().getShape(), cell.getRow(), cell.getCol());
+                }
             }
         });
     }

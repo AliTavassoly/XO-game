@@ -49,6 +49,8 @@ public class Data {
 
         gsonBuilder.registerTypeAdapter(Object.class, new AbstractAdapter<>());
 
+        gsonBuilder.setPrettyPrinting();
+
         Gson gson = gsonBuilder.create();
 
         return gson;
@@ -56,17 +58,7 @@ public class Data {
 
     public synchronized static ObjectMapper getMapper(){
         ObjectMapper mapper = new ObjectMapper();
-        //mapper.enableDefaultTyping();
         mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.EVERYTHING);
-        /*PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator
-                .builder()
-                .allowIfBaseType("xo")
-                .build();
-
-        ObjectMapper mapper = JsonMapper.builder()
-                .activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL)
-                .build();*/
-
         return mapper;
     }
 }

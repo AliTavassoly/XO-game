@@ -1,7 +1,6 @@
 package xo.client.gui.panels;
 
 import xo.client.Mapper;
-import xo.client.XOClient;
 import xo.client.gui.GameFrame;
 import xo.client.gui.xocontrols.XOButton;
 import xo.data.Configs;
@@ -61,7 +60,7 @@ public class MainMenuPanel extends JPanel{
         multiPlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                Mapper.sendNewGame();
             }
         });
 
@@ -82,7 +81,7 @@ public class MainMenuPanel extends JPanel{
         logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Mapper.logout();
+                Mapper.sendLogout();
                 GameFrame.switchPanelTo(new LogisterPanel());
             }
         });

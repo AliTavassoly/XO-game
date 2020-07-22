@@ -103,6 +103,18 @@ public class Game {
         return i >= 0 && j >= 0 && i < boardRows && j < boardCols;
     }
 
+    private Character whoWonGame(){
+        if(whoWonVertically() != '.')
+            return whoWonVertically();
+        if(whoWonHorizontally() != '.')
+            return whoWonHorizontally();
+        if(whoWonNegativeDiagonalN() != '.')
+            return whoWonNegativeDiagonalN();
+        if(whoWonPositiveDiagonalN() != '.')
+            return whoWonPositiveDiagonalN();
+        return '.';
+    }
+
     private boolean isGameEnded(){
         return whoWonVertically() != '.' ||
                 whoWonHorizontally() != '.' ||

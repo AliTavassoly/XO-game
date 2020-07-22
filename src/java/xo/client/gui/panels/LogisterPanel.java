@@ -1,15 +1,11 @@
 package xo.client.gui.panels;
 
-import xo.client.Main;
 import xo.client.Mapper;
-import xo.client.XOClient;
 import xo.client.gui.GameFrame;
 import xo.client.gui.xocontrols.XOButton;
 import xo.client.gui.xocontrols.XOJTextField;
 import xo.data.Configs;
-import xo.data.DataBase;
 import xo.client.gui.util.ImageLoader;
-import xo.util.XOException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,14 +69,7 @@ public class LogisterPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    Mapper.login(userField.getText(), passwordField.getText());
-
-                    DataBase.save();
-
-//                    GameFrame.switchPanelTo(new GamePanel());
-                    GameFrame.switchPanelTo(new MainMenuPanel());
-                } catch (XOException xoException){
-                    error = xoException.getMessage();
+                    Mapper.sendLogin(userField.getText(), passwordField.getText());
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -91,10 +80,7 @@ public class LogisterPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    Mapper.register(userField.getText(), passwordField.getText());
-                    DataBase.save();
-                } catch (XOException xoException){
-                    error = xoException.getMessage();
+                    Mapper.sendRegister(userField.getText(), passwordField.getText());
                 } catch (Exception e){
                     e.printStackTrace();
                 }
