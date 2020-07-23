@@ -24,6 +24,7 @@ public class Game {
     public Game(Player player0, Player player1){
         boardRows = Configs.boardRows;
         boardCols = Configs.boardCols;
+        winCondition = Configs.winCondition;
 
         this.player0 = player0;
         this.player1 = player1;
@@ -140,7 +141,7 @@ public class Game {
         player1.changeTurn();
     }
 
-    private char whoWonGame(){
+    public char whoWonGame(){
         if(whoWonVertically() != '.')
             return whoWonVertically();
         if(whoWonHorizontally() != '.')
@@ -152,7 +153,7 @@ public class Game {
         return '.';
     }
 
-    private boolean isGameEnded(){
+    public boolean isGameEnded(){
         return whoWonVertically() != '.' ||
                 whoWonHorizontally() != '.' ||
                 whoWonNegativeDiagonalN() != '.' ||

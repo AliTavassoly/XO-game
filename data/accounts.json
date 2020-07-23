@@ -4,9 +4,9 @@
       "id" : 3,
       "username" : "c",
       "password" : "c",
-      "totalGames" : 0,
-      "winGames" : 0,
-      "lostGames" : 0,
+      "totalGames" : 4,
+      "winGames" : 2,
+      "lostGames" : 2,
       "point" : 0
     }
   },
@@ -26,10 +26,10 @@
       "id" : 1,
       "username" : "f",
       "password" : "f",
-      "totalGames" : 0,
-      "winGames" : 0,
-      "lostGames" : 0,
-      "point" : 0
+      "totalGames" : 3,
+      "winGames" : 1,
+      "lostGames" : 2,
+      "point" : -1
     }
   },
   "ali" : {
@@ -37,10 +37,10 @@
       "id" : 0,
       "username" : "ali",
       "password" : "ali",
-      "totalGames" : 0,
-      "winGames" : 0,
+      "totalGames" : 1,
+      "winGames" : 1,
       "lostGames" : 0,
-      "point" : 0
+      "point" : 1
     }
   }
 }

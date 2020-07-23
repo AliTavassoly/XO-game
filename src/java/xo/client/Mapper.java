@@ -35,7 +35,7 @@ public class Mapper {
     }
 
     public static void markCellResponse(char [][] board){
-        XOClient.getInstance().updateBoard(board);
+        XOClient.getInstance().afterMarkingCell(board);
     }
 
     public static void registerRequest(String username, String password) {
@@ -66,6 +66,34 @@ public class Mapper {
 
     public static void logoutResponse(){
         XOClient.getInstance().logout();
+    }
+
+    public static void cancelWaitingForGameRequest() {
+        Packet packet = new Packet("cancelWaitingForGameRequest", null);
+        packet.setAuthToken(XOClient.getInstance().currentAccount.getAuthToken());
+        XOClient.sendPacket(packet);
+    }
+
+    public static void cancelWaitingForGameResponse(){
+        XOClient.getInstance().cancelWaitingForGame();
+    }
+
+    public static void surrenderRequest(){
+        Packet packet = new Packet("surrenderRequest", null);
+        packet.setAuthToken(XOClient.getInstance().currentAccount.getAuthToken());
+        XOClient.sendPacket(packet);
+    }
+
+    public static void wonGame(){
+        XOClient.getInstance().wonGame();
+    }
+
+    public static void lostGame(){
+        XOClient.getInstance().lostGame();
+    }
+
+    public static void waitForGame(){
+        XOClient.getInstance().waitForGame();
     }
 
     public static void invokeFunction(Packet packet) {

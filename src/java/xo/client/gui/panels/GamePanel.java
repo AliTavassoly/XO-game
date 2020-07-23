@@ -1,5 +1,6 @@
 package xo.client.gui.panels;
 
+import xo.client.Mapper;
 import xo.client.gui.GameFrame;
 import xo.client.gui.xocontrols.XOButton;
 import xo.server.data.Configs;
@@ -19,11 +20,11 @@ public class GamePanel extends JPanel {
 
     private BoardPanel boardPanel;
 
-    public Player getMyPlayer(){
+    public Player getMyPlayer() {
         return myPlayer;
     }
 
-    public GamePanel(Player myPlayer, Player enemyPlayer){
+    public GamePanel(Player myPlayer, Player enemyPlayer) {
         this.myPlayer = myPlayer;
         this.enemyPlayer = enemyPlayer;
 
@@ -41,10 +42,10 @@ public class GamePanel extends JPanel {
 
         layoutComponent();
     }
-   
+
     private void customizeLabels() {
-        int labelsWidth = ((int) boardPanel.getPreferredSize().getWidth() - 2 * (int)myShape.getPreferredSize().getWidth()) / 2;
-        int labelsHeight = (int)myShape.getPreferredSize().getHeight();
+        int labelsWidth = ((int) boardPanel.getPreferredSize().getWidth() - 2 * (int) myShape.getPreferredSize().getWidth()) / 2;
+        int labelsHeight = (int) myShape.getPreferredSize().getHeight();
 
         myUserLabel.setPreferredSize(new Dimension(labelsWidth, labelsHeight));
         myUserLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -70,7 +71,7 @@ public class GamePanel extends JPanel {
         surrenderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                Mapper.surrenderRequest();
             }
         });
     }
@@ -83,14 +84,21 @@ public class GamePanel extends JPanel {
         enemyUserLabel.setFont(GameFrame.getCustomFont(0));
     }
 
-    private void makeShapes(){
+    private void makeShapes() {
         myShape = new ShapePanel(Configs.shapeInGameWidth, Configs.shapeInGameHeight, myPlayer.getShape());
         enemyShape = new ShapePanel(Configs.shapeInGameWidth, Configs.shapeInGameHeight, enemyPlayer.getShape());
 
-        if(myPlayer.isMyTurn())
+        handleTurnActivity();
+    }
+
+    private void handleTurnActivity() {
+        if (myPlayer.isMyTurn()) {
             myShape.setStatus(true);
-        else
+            enemyShape.setStatus(false);
+        } else {
             enemyShape.setStatus(true);
+            myShape.setStatus(false);
+        }
     }
 
     private void layoutComponent() {
@@ -132,8 +140,19 @@ public class GamePanel extends JPanel {
         add(surrenderButton, grid);
     }
 
-    public void updateGame(char[][] newBoard){
+    public void changeTurn(){
+        myPlayer.setMyTurn(!myPlayer.isMyTurn());
+        enemyPlayer.setMyTurn(!enemyPlayer.isMyTurn());
+
+        handleTurnActivity();
+
+        revalidate();
+        repaint();
+    }
+
+    public void updateGame(char[][] newBoard) {
         boardPanel.updateBoard(newBoard);
+        handleTurnActivity();
         revalidate();
         repaint();
     }

@@ -68,6 +68,34 @@ public class Mapper {
         clientHandler.sendPacket(packet);
     }
 
+    public static void cancelWaitingForGameRequest(ClientHandler clientHandler){
+        XOServer.getInstance().cancelWaitingForGame(clientHandler);
+    }
+
+    public static void cancelWaitingForGameResponse(ClientHandler clientHandler) {
+        Packet packet = new Packet("cancelWaitingForGameResponse", new Object[]{});
+        clientHandler.sendPacket(packet);
+    }
+
+    public static void surrenderRequest(ClientHandler clientHandler){
+        XOServer.getInstance().surrender(clientHandler);
+    }
+
+    public static void lostGame(ClientHandler clientHandler){
+        Packet packet = new Packet("lostGame", new Object[]{});
+        clientHandler.sendPacket(packet);
+    }
+
+    public static void wonGame(ClientHandler clientHandler){
+        Packet packet = new Packet("wonGame", new Object[]{});
+        clientHandler.sendPacket(packet);
+    }
+
+    public static void waitForGame(ClientHandler clientHandler){
+        Packet packet = new Packet("waitForGame", new Object[]{});
+        clientHandler.sendPacket(packet);
+    }
+
     public static void invokeFunction(Packet packet, ClientHandler clientHandler) {
         for (Method method : Mapper.class.getMethods()) {
             if (method.getName().equals(packet.getFunctionName())) {

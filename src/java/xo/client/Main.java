@@ -15,7 +15,6 @@ public class Main {
             e.printStackTrace();
         }
         client = XOClient.makeNewInstance(serverIP, serverPort);
-        //client.start();
         client.start();
     }
 }

@@ -6,5 +6,6 @@
   "gameFrameWidth": 500,
   "gameFrameHeight": 500,
   "shapeInGameWidth": 70,
-  "shapeInGameHeight": 70
+  "shapeInGameHeight": 70,
+  "winCondition": 4
 }

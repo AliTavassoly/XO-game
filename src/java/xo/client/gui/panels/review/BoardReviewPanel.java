@@ -1,4 +1,4 @@
-package xo.client.gui.panels;
+package xo.client.gui.panels.review;
 
 import xo.client.Mapper;
 import xo.client.gui.model.Cell;
@@ -9,27 +9,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BoardPanel extends JPanel {
+public class BoardReviewPanel extends JPanel {
     private Cell[][] cells;
-    private GamePanel gamePanel;
 
-    public BoardPanel(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
-
+    public BoardReviewPanel() {
         configGameBoard();
 
         makeBoard();
 
         drawBoard();
-    }
-
-    private void makeMouseListener(Cell cell) {
-        cell.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Mapper.markCellRequest(gamePanel.getMyPlayer().getShape(), cell.getRow(), cell.getCol());
-            }
-        });
     }
 
     private void makeBoard() {
@@ -38,7 +26,6 @@ public class BoardPanel extends JPanel {
         for (int i = 0; i < Configs.boardCols; i++) {
             for (int j = 0; j < Configs.boardRows; j++) {
                 cells[i][j] = new Cell(i, j);
-                makeMouseListener(cells[i][j]);
             }
         }
     }

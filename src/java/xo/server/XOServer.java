@@ -1,5 +1,6 @@
 package xo.server;
 
+import xo.model.Account;
 import xo.model.Player;
 import xo.server.data.Data;
 import xo.server.data.DataBase;
@@ -18,7 +19,7 @@ public class XOServer extends Thread {
     private static XOServer instance;
     private ServerSocket serverSocket;
 
-    private Map<String, String> keys;
+    private Map<String, String> keys; // AuthToken / Username
     private ArrayList<String> waitRoom;
 
     private XOServer(int serverPort) {
@@ -87,11 +88,13 @@ public class XOServer extends Thread {
 
             Mapper.newGameResponse(player0, player1, Data.getAccountDetails(player0.getUsername()).getClientHandler());
             Mapper.newGameResponse(player1, player0, Data.getAccountDetails(player1.getUsername()).getClientHandler());
+        } else {
+            Mapper.waitForGame(clientHandler);
         }
     }
 
-    public synchronized void removeGameWaiter(String username){
-        waitRoom.remove(username);
+    public synchronized void removeGameWaiter(String authToken){
+        waitRoom.remove(keys.get(authToken));
     }
 
     @Override
@@ -110,10 +113,12 @@ public class XOServer extends Thread {
         }
     }
 
-    public synchronized void removeClientHandler(String authToken) {
+    public void clientHandlerDisconnected(String authToken) {
         String username = keys.get(authToken);
         Data.getAccountDetails(username).setClientHandler(null);
         Data.getAccountDetails(username).setCurrentGame(null);
+
+        removeGameWaiter(authToken);
     }
 
     public synchronized void addAccountToServer(String username, String authToken, ClientHandler clientHandler){
@@ -136,8 +141,75 @@ public class XOServer extends Thread {
 
             Mapper.markCellResponse(game.getBoard(), Data.getAccountDetails(user0).getClientHandler());
             Mapper.markCellResponse(game.getBoard(), Data.getAccountDetails(user1).getClientHandler());
+
+            afterMarkCell(game);
         } catch (XOException e){
             e.printStackTrace();
         }
+    }
+
+    public void afterMarkCell(Game game){
+        String user0 = game.getPlayer0().getUsername();
+        String user1 = game.getPlayer1().getUsername();
+
+        ClientHandler clientHandler0 = Data.getAccountDetails(user0).getClientHandler();
+        ClientHandler clientHandler1 = Data.getAccountDetails(user1).getClientHandler();
+
+        if(game.isGameEnded()){
+            if(game.whoWonGame() == game.getPlayer0().getShape())
+                wonGame(clientHandler0);
+            else
+                lostGame(clientHandler0);
+
+            if(game.whoWonGame() == game.getPlayer1().getShape())
+                wonGame(clientHandler1);
+            else
+                lostGame(clientHandler1);
+        }
+    }
+
+    public void cancelWaitingForGame(ClientHandler clientHandler) {
+        removeGameWaiter(clientHandler.getAuthToken());
+        Mapper.cancelWaitingForGameResponse(clientHandler);
+    }
+
+    public void surrender(ClientHandler clientHandler) {
+        Game game = Data.getAccountDetails(keys.get(clientHandler.getAuthToken())).getCurrentGame();
+
+        String user0 = game.getPlayer0().getUsername();
+        String user1 = game.getPlayer1().getUsername();
+
+        ClientHandler clientHandler0 = Data.getAccountDetails(user0).getClientHandler();
+        ClientHandler clientHandler1 = Data.getAccountDetails(user1).getClientHandler();
+
+        if(clientHandler.getAuthToken().equals(clientHandler0.getAuthToken())){
+            lostGame(clientHandler0);
+            wonGame(clientHandler1);
+        } else {
+            lostGame(clientHandler1);
+            wonGame(clientHandler0);
+        }
+    }
+
+    private void wonGame(ClientHandler clientHandler){
+        Account account = Data.getAccountDetails(keys.get(clientHandler.getAuthToken())).getAccount();
+
+        account.setTotalGames(account.getTotalGames() + 1);
+        account.setWinGames(account.getWinGames() + 1);
+        account.setPoint(account.getWinGames() - account.getLostGames());
+        DataBase.save();
+
+        Mapper.wonGame(clientHandler);
+    }
+
+    private void lostGame(ClientHandler clientHandler){
+        Account account = Data.getAccountDetails(keys.get(clientHandler.getAuthToken())).getAccount();
+
+        account.setTotalGames(account.getTotalGames() + 1);
+        account.setLostGames(account.getLostGames() + 1);
+        account.setPoint(account.getWinGames() - account.getLostGames());
+        DataBase.save();
+
+        Mapper.lostGame(clientHandler);
     }
 }

@@ -2,8 +2,6 @@ package xo.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import xo.client.XOClient;
-import xo.model.Player;
 import xo.server.data.Data;
 import xo.model.Packet;
 import xo.util.XOException;
@@ -58,7 +56,7 @@ public class ClientHandler extends Thread {
                 Mapper.invokeFunction(packet, this);
             }
         } catch (Exception e) {
-            XOServer.getInstance().removeClientHandler(authToken); // ?????
+            XOServer.getInstance().clientHandlerDisconnected(authToken); // ?????
             e.printStackTrace();
         }
     }

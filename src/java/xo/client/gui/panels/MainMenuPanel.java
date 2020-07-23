@@ -3,6 +3,7 @@ package xo.client.gui.panels;
 import xo.client.Mapper;
 import xo.client.XOClient;
 import xo.client.gui.GameFrame;
+import xo.client.gui.panels.review.GameReviewerPanel;
 import xo.client.gui.xocontrols.XOButton;
 import xo.server.data.Configs;
 import xo.client.gui.util.ImageLoader;
@@ -13,12 +14,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-public class MainMenuPanel extends JPanel{
-    private XOButton multiPlayer, status, logout, scoreBoard;
+public class MainMenuPanel extends JPanel {
+    private XOButton multiPlayer, status, logout, scoreBoard, reviewGame;
 
     private static BufferedImage background;
 
-    public MainMenuPanel(){
+    public MainMenuPanel() {
         configPanel();
 
         makeButtons();
@@ -32,9 +33,9 @@ public class MainMenuPanel extends JPanel{
 
     @Override
     protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics2D g2 = (Graphics2D) g;
 
-        if(background == null)
+        if (background == null)
             background = ImageLoader.getInstance().getImage("/mainmenu_background.png");
 
         g2.drawImage(background.getScaledInstance(
@@ -54,6 +55,9 @@ public class MainMenuPanel extends JPanel{
 
         scoreBoard = new XOButton("Scoreboard");
         scoreBoard.setFont(GameFrame.getCustomFont(0));
+
+        reviewGame = new XOButton("Review Game");
+        reviewGame.setFont(GameFrame.getCustomFont(0));
 
         logout = new XOButton("Logout");
         logout.setFont(GameFrame.getCustomFont(0));
@@ -76,6 +80,17 @@ public class MainMenuPanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
+            }
+        });
+
+        reviewGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (XOClient.getInstance().myPlayerReview != null)
+                    GameFrame.switchPanelTo(new GameReviewerPanel(
+                            XOClient.getInstance().myPlayerReview,
+                            XOClient.getInstance().enemyPlayerReview,
+                            XOClient.getInstance().reviewBoards));
             }
         });
 
@@ -109,6 +124,11 @@ public class MainMenuPanel extends JPanel{
 
         grid.gridx = 0;
         grid.gridy = 3;
+        grid.insets = new Insets(20, 0, 20, 0);
+        add(reviewGame, grid);
+
+        grid.gridx = 0;
+        grid.gridy = 4;
         grid.insets = new Insets(20, 0, 20, 0);
         add(logout, grid);
     }
