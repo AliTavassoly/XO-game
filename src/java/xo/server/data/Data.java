@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import xo.model.Account;
-import xo.server.model.AccountDetails;
+import xo.server.model.AccountDetail;
 import xo.util.AbstractAdapter;
 import xo.util.XOException;
 
@@ -13,34 +13,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Data {
-    private static Map<String, AccountDetails> accounts = new HashMap<>();
+    private static Map<String, AccountDetail> accountsDetails = new HashMap<>();
 
-    public static void setAccounts(Map<String, AccountDetails> accounts) {
-        Data.accounts = accounts;
+    public static void setAccountsDetails(Map<String, AccountDetail> accountsDetails) {
+        Data.accountsDetails = accountsDetails;
     }
 
-    public static Map<String, AccountDetails> getAccounts() {
-        return accounts;
+    public static Map<String, AccountDetail> getAccountsDetails() {
+        return accountsDetails;
     }
 
     public static void checkAccount(String username, String password) throws XOException {
-        if (!accounts.containsKey(username)) {
+        if (!accountsDetails.containsKey(username)) {
             throw new XOException("This username does not exists!");
         }
-        if (!accounts.get(username).getAccount().getPassword().equals(password)) {
+        if (!accountsDetails.get(username).getAccount().getPassword().equals(password)) {
             throw new XOException("Password is not correct!");
         }
     }
 
-    public static void addAccount(String username, String password) throws XOException {
-        if (accounts.containsKey(username)) {
+    public static void addAccountDetail(String username, String password) throws XOException {
+        if (accountsDetails.containsKey(username)) {
             throw new XOException("This username is already exists!");
         }
-        accounts.put(username, new AccountDetails(new Account(accounts.size(), username, password), null, null));
+        accountsDetails.put(username, new AccountDetail(new Account(accountsDetails.size(), username, password), null, null));
     }
 
-    public static AccountDetails getAccountDetails(String username) {
-        return accounts.get(username);
+    public static AccountDetail getAccountDetails(String username) {
+        return accountsDetails.get(username);
     }
 
     public synchronized static Gson getGson(){

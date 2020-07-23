@@ -2,7 +2,7 @@ package xo.server.data;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import xo.server.model.AccountDetails;
+import xo.server.model.AccountDetail;
 
 import java.io.File;
 import java.util.HashMap;
@@ -25,27 +25,27 @@ public class DataBase {
         Configs.setConfigs(gameConfigs);
     }
 
-    private static Map<String, AccountDetails> getAccounts() throws Exception {
+    private static Map<String, AccountDetail> getAccounts() throws Exception {
         File file = new File(dataPath + "/accounts.json");
         file.getParentFile().mkdirs();
         file.createNewFile();
-        Map<String, AccountDetails> ans = null;
+        Map<String, AccountDetail> ans = null;
         try {
-            ans = mapper.readValue(file, new TypeReference<HashMap<String, AccountDetails>>() {
+            ans = mapper.readValue(file, new TypeReference<HashMap<String, AccountDetail>>() {
             });
         } catch (Exception e){ }
         if (ans == null)
-            return Data.getAccounts();
+            return Data.getAccountsDetails();
         return ans;
     }
 
     private static void loadAccounts() throws Exception{
-        Data.setAccounts(getAccounts());
+        Data.setAccountsDetails(getAccounts());
     }
 
     private static void saveAccounts() throws Exception {
         File file = new File(dataPath + "/accounts.json");
-        mapper.writeValue(file, Data.getAccounts());
+        mapper.writeValue(file, Data.getAccountsDetails());
     }
 
     public static void save(){

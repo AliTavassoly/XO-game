@@ -7,7 +7,7 @@ import xo.server.logic.Game;
 
 @JsonIgnoreProperties(value = { "currentGame", "clientHandler"})
 
-public class AccountDetails {
+public class AccountDetail {
     private Account account;
     private Game currentGame;
     private ClientHandler clientHandler;
@@ -33,9 +33,9 @@ public class AccountDetails {
         this.clientHandler = clientHandler;
     }
 
-    public AccountDetails(){ }
+    public AccountDetail(){ }
 
-    public AccountDetails(Account account, Game currentGame, ClientHandler clientHandler){
+    public AccountDetail(Account account, Game currentGame, ClientHandler clientHandler){
         this.account = account;
         this.currentGame = currentGame;
         this.clientHandler = clientHandler;

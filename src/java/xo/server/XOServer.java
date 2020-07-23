@@ -19,13 +19,13 @@ public class XOServer extends Thread {
     private ServerSocket serverSocket;
 
     private Map<String, String> keys;
-    private ArrayList<String> waitingForGame;
+    private ArrayList<String> waitRoom;
 
     private XOServer(int serverPort) {
         try {
             this.serverSocket = new ServerSocket(serverPort);
             this.keys = new HashMap<>();
-            this.waitingForGame = new ArrayList<>();
+            this.waitRoom = new ArrayList<>();
 
             System.out.println("Server Started at: " + serverPort);
         } catch (IOException e) {
@@ -54,7 +54,7 @@ public class XOServer extends Thread {
     }
 
     public static void register(String username, String password, ClientHandler clientHandler) throws XOException {
-        Data.addAccount(username, password);
+        Data.addAccountDetail(username, password);
         Data.getAccountDetails(username).getAccount().setAuthToken(AuthToken.generateAuthToken());
         Data.getAccountDetails(username).setClientHandler(clientHandler);
 
@@ -71,11 +71,11 @@ public class XOServer extends Thread {
     }
 
     public synchronized void addNewGameWaiter(String username, ClientHandler clientHandler){
-        waitingForGame.add(username);
-        if(waitingForGame.size() >= 2){
+        waitRoom.add(username);
+        if(waitRoom.size() >= 2){
 
-            String user0 = waitingForGame.remove(0);
-            String user1 = waitingForGame.remove(0);
+            String user0 = waitRoom.remove(0);
+            String user1 = waitRoom.remove(0);
 
             Player player0 = new Player(user0, 'X', true);
             Player player1 = new Player(user1, 'O', false);
@@ -91,7 +91,7 @@ public class XOServer extends Thread {
     }
 
     public synchronized void removeGameWaiter(String username){
-        waitingForGame.remove(username);
+        waitRoom.remove(username);
     }
 
     @Override
