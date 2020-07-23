@@ -6,11 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ShapePanel extends JPanel {
-    private Character shape;
+    private char shape;
     private boolean status;
     private int width, height;
 
-    public ShapePanel(Character shape) {
+    public ShapePanel(char shape) {
         this.shape = shape;
 
         status = false;
@@ -18,7 +18,7 @@ public class ShapePanel extends JPanel {
         configShape();
     }
 
-    public ShapePanel(int width, int height, Character shape) {
+    public ShapePanel(int width, int height, char shape) {
         this.shape = shape;
         this.width = width;
         this.height = height;

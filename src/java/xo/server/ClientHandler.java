@@ -1,52 +1,65 @@
 package xo.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import xo.data.DataBase;
+import xo.client.XOClient;
 import xo.model.Player;
-import xo.model.XOClient;
-import xo.data.Data;
+import xo.server.data.Data;
 import xo.model.Packet;
+import xo.util.XOException;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ClientHandler extends Thread {
-    private XOServer server;
     private Socket socket;
-    private XOClient client;
+    private String authToken;
 
-    public void setClient(XOClient client){
-        this.client = client;
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+    public String getAuthToken() {
+        return this.authToken;
     }
 
-    public ClientHandler(XOServer server, Socket socket) {
-        this.server = server;
+    public ClientHandler(){}
+
+    public ClientHandler(Socket socket) {
         this.socket = socket;
     }
 
     @Override
     public void run() {
+        Scanner scanner = null;
         try {
-            Scanner scanner = new Scanner(socket.getInputStream());
-            while (socket.isConnected()) {
-                System.out.println("server started to read client ... : ");
+            scanner = new Scanner(socket.getInputStream());
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+
+        System.out.println("server started to read client ... : ");
+
+        try {
+            while (true) {
                 String message = scanner.nextLine();
-                System.out.println(message);
 
-                ObjectMapper mapper = Data.getMapper();
+                Packet packet = getPacket(message);
 
-                Packet packet = (Packet) mapper.readValue(message, Object.class);
+                try {
+                    if (authToken != null)
+                        XOServer.getInstance().checkAuthToken(packet.getAuthToken());
+                } catch (XOException e) {
+                    e.printStackTrace();
+                    continue;
+                }
 
                 Mapper.invokeFunction(packet, this);
             }
-
-            if (!socket.isConnected())
-                XOServer.getInstance().removeClientHandler(this);
-        } catch (IOException | NoSuchElementException ioException) {
-            ioException.printStackTrace();
+        } catch (Exception e) {
+            XOServer.getInstance().removeClientHandler(authToken); // ?????
+            e.printStackTrace();
         }
     }
 
@@ -54,8 +67,7 @@ public class ClientHandler extends Thread {
         try {
             String objectString;
 
-            objectString = Data.getMapper().writeValueAsString(packet);
-            System.out.println(objectString);
+            objectString = Data.getNetworkMapper().writeValueAsString(packet);
 
             new PrintStream(socket.getOutputStream()).println(objectString);
         } catch (Exception e) {
@@ -63,17 +75,14 @@ public class ClientHandler extends Thread {
         }
     }
 
-    public void disconnect() {
-        //if (client.currentAccount != null) {
-            System.out.println(Data.getAccount(client.currentAccount.getUsername()));
-            Data.getAccount(client.currentAccount.getUsername()).setAuthToken(0);
-            DataBase.save();
-        //}
-    }
-
-    public Player getPlayer(char shape, boolean isMyTurn){
-        System.out.println("Debugger in getPlayer1: " + client);
-        System.out.println("Debugger in getPlayer2: " + client.currentAccount);
-        return new Player(client.currentAccount.getUsername(), shape, isMyTurn);
+    private Packet getPacket(String message) {
+        ObjectMapper mapper = Data.getNetworkMapper();
+        Packet packet = null;
+        try {
+            packet = mapper.readValue(message, Packet.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return packet;
     }
 }

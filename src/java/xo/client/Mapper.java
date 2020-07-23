@@ -4,76 +4,68 @@ import xo.client.gui.panels.GamePanel;
 import xo.model.Account;
 import xo.model.Packet;
 import xo.model.Player;
-import xo.model.XOClient;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class Mapper {
-    public static void setCurrentAccount(Account account) {
-        XOClient.getInstance().setCurrentAccount(account);
-        System.out.println("auth from client: " + account.getAuthToken());
-    }
-
-    public static void setCurrentPlayer(Player player) {
-        XOClient.getInstance().setCurrentPlayer(player);
-    }
-
     public static void setCurrentGamePanel(GamePanel gamePanel) {
         XOClient.getInstance().setCurrentGamePanel(gamePanel);
     }
 
-    public static void updateGame(char[][] newBoard) {
-        XOClient.getInstance().getCurrentGamePanel().updateGame(newBoard);
+    public static void updateGameRequest(char[][] newBoard) {
+        XOClient.getInstance().updateBoard(newBoard);
     }
 
-    public static void loginRequest(){
-        XOClient.getInstance().login();
+    public static void newGameRequest(String username){
+        Packet packet = new Packet("newGameRequest",
+                new Object[]{username});
+        packet.setAuthToken(XOClient.getInstance().currentAccount.getAuthToken());
+        XOClient.sendPacket(packet);
     }
 
-    public static void logoutRequest(){
-        XOClient.getInstance().logout();
-    }
-
-    public static void registerRequest(){
-        XOClient.getInstance().register();
-    }
-
-    public static void newGameRequest(Player myPlayer, Player enemyPlayer){
+    public static void newGameResponse(Player myPlayer, Player enemyPlayer){
         XOClient.getInstance().newGame(myPlayer, enemyPlayer);
     }
 
-    public static void sendSetClient(XOClient client){
-        Packet packet = new Packet("setClientRequest", new Object[]{client}); // edited
+    public static void markCellRequest(char character, int i, int j) {
+        Packet packet = new Packet("markCellRequest",
+                new Object[]{character, i, j});
         XOClient.sendPacket(packet);
     }
 
-    public static void sendNewGame(){
-        Packet packet = new Packet("newGameRequest",
-                null);
-        XOClient.sendPacket(packet);
+    public static void markCellResponse(char [][] board){
+        XOClient.getInstance().updateBoard(board);
     }
 
-    public static void sendMarkCell(Character character, int i, int j) {
-
-    }
-
-    public static void sendRegister(String username, String password) {
+    public static void registerRequest(String username, String password) {
         Packet packet = new Packet("registerRequest",
                 new Object[]{username, password});
         XOClient.sendPacket(packet);
     }
 
-    public static void sendLogin(String username, String password) {
+    public static void registerResponse(Account account){
+        XOClient.getInstance().register(account);
+    }
+
+    public static void loginRequest(String username, String password) {
         Packet packet = new Packet("loginRequest",
                 new Object[]{username, password});
         XOClient.sendPacket(packet);
     }
 
-    public static void sendLogout() {
+    public static void loginResponse(Account account){
+        XOClient.getInstance().login(account);
+    }
+
+    public static void logoutRequest() {
         Packet packet = new Packet("logoutRequest", null);
         packet.setAuthToken(XOClient.getInstance().currentAccount.getAuthToken());
         XOClient.sendPacket(packet);
+    }
+
+    public static void logoutResponse(){
+        XOClient.getInstance().logout();
     }
 
     public static void invokeFunction(Packet packet) {

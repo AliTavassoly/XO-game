@@ -1,6 +1,6 @@
 package xo.client.network;
 
-import xo.data.Data;
+import xo.server.data.Data;
 import xo.model.Packet;
 
 import java.io.PrintStream;
@@ -16,9 +16,7 @@ public class Sender{
         try {
             String objectString;
 
-            System.out.println("salam start");
-            objectString = Data.getMapper().writeValueAsString(packet);
-            System.out.println("salam end");
+            objectString = Data.getNetworkMapper().writeValueAsString(packet);
 
             System.out.println(objectString);
 

@@ -1,5 +1,8 @@
 package xo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(value = { "authToken" })
 public class Account {
     private int id;
 
@@ -11,12 +14,12 @@ public class Account {
     private int lostGames;
     private int point;
 
-    private int authToken;
+    private String authToken;
 
-    public void setAuthToken(int authToken){
+    public void setAuthToken(String authToken){
         this.authToken = authToken;
     }
-    public int getAuthToken(){
+    public String getAuthToken(){
         return authToken;
     }
 

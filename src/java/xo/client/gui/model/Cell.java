@@ -1,7 +1,7 @@
 package xo.client.gui.model;
 
 import xo.client.gui.xocontrols.XOButton;
-import xo.data.Configs;
+import xo.server.data.Configs;
 import xo.client.gui.util.ImageLoader;
 
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 public class Cell extends XOButton {
     private final int row, col;
     private final int width, height;
-    private Character value;
+    private char value;
 
     private static BufferedImage xImage;
     private static BufferedImage oImage;
@@ -40,7 +40,7 @@ public class Cell extends XOButton {
         setPreferredSize(new Dimension(width, height));
     }
 
-    public void setValue(Character value){
+    public void setValue(char value){
         this.value = value;
     }
 

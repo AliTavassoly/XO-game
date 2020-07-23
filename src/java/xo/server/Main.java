@@ -1,6 +1,6 @@
 package xo.server;
 
-import xo.data.DataBase;
+import xo.server.data.DataBase;
 
 public class Main {
     static int serverPort = 8000;

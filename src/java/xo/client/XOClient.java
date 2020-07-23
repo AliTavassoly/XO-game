@@ -1,18 +1,19 @@
-package xo.model;
+package xo.client;
 
-import xo.client.Mapper;
 import xo.client.gui.GameFrame;
 import xo.client.gui.panels.GamePanel;
 import xo.client.gui.panels.LogisterPanel;
 import xo.client.gui.panels.MainMenuPanel;
 import xo.client.network.Receiver;
 import xo.client.network.Sender;
+import xo.model.Account;
+import xo.model.Packet;
+import xo.model.Player;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.security.SecureRandom;
 
 public class XOClient /*extends Thread*/{
     private static XOClient instance;
@@ -31,7 +32,6 @@ public class XOClient /*extends Thread*/{
     private XOClient(String serverIP, int serverPort){
         try{
             this.socket = new Socket(serverIP, serverPort);
-            System.out.println("Connected to Server at: " + serverIP + ":" + serverPort);
 
             GameFrame.getInstance();
         } catch (Exception e) {
@@ -77,9 +77,6 @@ public class XOClient /*extends Thread*/{
             sender = new Sender(socketPrinter);
 
             receiver.start();
-
-            System.out.println("Debugger in XOClient: " + this);
-            Mapper.sendSetClient(XOClient.this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,20 +94,29 @@ public class XOClient /*extends Thread*/{
         currentGamePanel = gamePanel;
     }
 
-    public void login(){
+    public void login(Account account){
+        setCurrentAccount(account);
         GameFrame.switchPanelTo(new MainMenuPanel());
     }
 
-    public void register(){
+    public void register(Account account){
+        setCurrentAccount(account);
         GameFrame.switchPanelTo(new MainMenuPanel());
     }
 
     public void logout(){
+        setCurrentAccount(null);
         GameFrame.switchPanelTo(new LogisterPanel());
     }
 
     public void newGame(Player myPlayer, Player enemyPlayer) {
-        GameFrame.switchPanelTo(new GamePanel(myPlayer, enemyPlayer));
+        GamePanel gamePanel = new GamePanel(myPlayer, enemyPlayer);
+        currentGamePanel = gamePanel;
+        GameFrame.switchPanelTo(gamePanel);
+    }
+
+    public void updateBoard(char [][] board){
+        currentGamePanel.updateGame(board);
     }
 
     public static void sendPacket(Packet packet){

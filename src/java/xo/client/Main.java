@@ -1,7 +1,6 @@
 package xo.client;
 
-import xo.data.DataBase;
-import xo.model.XOClient;
+import xo.server.data.DataBase;
 
 public class Main {
     static String serverIP = "localhost";

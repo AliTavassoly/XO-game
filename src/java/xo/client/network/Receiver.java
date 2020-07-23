@@ -2,7 +2,7 @@ package xo.client.network;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import xo.client.Mapper;
-import xo.data.Data;
+import xo.server.data.Data;
 import xo.model.Packet;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class Receiver extends Thread {
                 String message = scanner.nextLine();
                 System.out.println(message);
 
-                ObjectMapper mapper = Data.getMapper();
+                ObjectMapper mapper = Data.getNetworkMapper();
 
                 Packet packet = (Packet) mapper.readValue(message, Object.class);
 

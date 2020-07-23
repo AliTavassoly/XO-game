@@ -1,7 +1,7 @@
 package xo.client.gui;
 
 import xo.client.gui.panels.LogisterPanel;
-import xo.data.Configs;
+import xo.server.data.Configs;
 import xo.client.gui.util.FontLoader;
 
 import javax.swing.*;

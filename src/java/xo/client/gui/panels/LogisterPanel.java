@@ -4,7 +4,7 @@ import xo.client.Mapper;
 import xo.client.gui.GameFrame;
 import xo.client.gui.xocontrols.XOButton;
 import xo.client.gui.xocontrols.XOJTextField;
-import xo.data.Configs;
+import xo.server.data.Configs;
 import xo.client.gui.util.ImageLoader;
 
 import javax.swing.*;
@@ -69,7 +69,7 @@ public class LogisterPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    Mapper.sendLogin(userField.getText(), passwordField.getText());
+                    Mapper.loginRequest(userField.getText(), passwordField.getText());
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -80,7 +80,7 @@ public class LogisterPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    Mapper.sendRegister(userField.getText(), passwordField.getText());
+                    Mapper.registerRequest(userField.getText(), passwordField.getText());
                 } catch (Exception e){
                     e.printStackTrace();
                 }

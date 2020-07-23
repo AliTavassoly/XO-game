@@ -1,17 +1,14 @@
 package xo.server;
 
-import xo.data.Data;
-import xo.data.DataBase;
+import xo.client.XOClient;
+import xo.server.data.Data;
 import xo.model.Account;
 import xo.model.Packet;
 import xo.model.Player;
-import xo.model.XOClient;
 import xo.util.XOException;
 
-import java.lang.ref.Cleaner;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.SecureRandom;
 
 public class Mapper {
     public static void loginRequest(String username, String password, ClientHandler clientHandler) {
@@ -22,6 +19,13 @@ public class Mapper {
         }
     }
 
+    public static void loginResponse(String username, ClientHandler clientHandler){
+        Account account = Data.getAccountDetails(username).getAccount();
+
+        Packet packet = new Packet("loginResponse", new Object[]{account});
+        clientHandler.sendPacket(packet);
+    }
+
     public static void registerRequest(String username, String password, ClientHandler clientHandler) {
         try {
             XOServer.register(username, password, clientHandler);
@@ -30,53 +34,37 @@ public class Mapper {
         }
     }
 
+    public static void registerResponse(String username, ClientHandler clientHandler) {
+        Account account = Data.getAccountDetails(username).getAccount();
+
+        Packet packet = new Packet("registerResponse", new Object[]{account});
+        clientHandler.sendPacket(packet);
+    }
+
     public static void logoutRequest(ClientHandler clientHandler) {
         XOServer.logout(clientHandler);
     }
 
-    public static void newGameRequest(ClientHandler clientHandler){
-        XOServer.getInstance().newGame(clientHandler);
-    }
-
-    public static void setClientRequest(XOClient client, ClientHandler clientRequest){
-        clientRequest.setClient(client);
-    }
-
-    public static void sendLogin(String username, ClientHandler clientHandler) {
-        Account account = Data.getAccount(username);
-        account.setAuthToken(new SecureRandom().nextInt());
-        DataBase.save();
-
-        System.out.println("auth from server: " + account.getAuthToken());
-
-        Packet packet = new Packet("setCurrentAccount", new Object[]{account});
-        clientHandler.sendPacket(packet);
-
-        packet = new Packet("loginRequest", new Object[]{});
+    public static void logoutResponse(ClientHandler clientHandler) {
+        Packet packet = new Packet("logoutResponse", new Object[]{});
         clientHandler.sendPacket(packet);
     }
 
-    public static void sendRegister(String username, ClientHandler clientHandler) {
-        Account account = Data.getAccount(username);
-        account.setAuthToken(new SecureRandom().nextInt());
+    public static void newGameRequest(String username, ClientHandler clientHandler){
+        XOServer.getInstance().addNewGameWaiter(username, clientHandler);
+    }
 
-        Packet packet = new Packet("setCurrentAccount", new Object[]{account});
-        clientHandler.sendPacket(packet);
-
-        packet = new Packet("registerRequest", new Object[]{});
+    public static void newGameResponse(Player myPlayer, Player enemyPlayer, ClientHandler clientHandler){
+        Packet packet = new Packet("newGameResponse", new Object[]{myPlayer, enemyPlayer});
         clientHandler.sendPacket(packet);
     }
 
-    public static void sendLogout(ClientHandler clientHandler) {
-        Packet packet = new Packet("setCurrentAccount", new Object[]{null});
-        clientHandler.sendPacket(packet);
-
-        packet = new Packet("logoutRequest", new Object[]{});
-        clientHandler.sendPacket(packet);
+    public static void markCellRequest(char character, int i, int j, ClientHandler clientHandler) {
+        XOServer.getInstance().markCell(character, i, j, clientHandler);
     }
 
-    public static void sendNewGame(Player myPlayer, Player enemyPlayer, ClientHandler clientHandler){
-        Packet packet = new Packet("newGameRequest", new Object[]{myPlayer, enemyPlayer});
+    public static void markCellResponse(char[][] board, ClientHandler clientHandler) {
+        Packet packet = new Packet("markCellResponse", new Object[]{board});
         clientHandler.sendPacket(packet);
     }
 

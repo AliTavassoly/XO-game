@@ -2,7 +2,7 @@ package xo.client.gui.panels;
 
 import xo.client.Mapper;
 import xo.client.gui.model.Cell;
-import xo.data.Configs;
+import xo.server.data.Configs;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,7 @@ public class BoardPanel extends JPanel {
     private Cell[][] cells;
     private GamePanel gamePanel;
 
-    public BoardPanel(GamePanel gamePanel){
+    public BoardPanel(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
 
         configGameBoard();
@@ -23,13 +23,11 @@ public class BoardPanel extends JPanel {
         drawBoard();
     }
 
-    private void makeMouseListener(Cell cell){
+    private void makeMouseListener(Cell cell) {
         cell.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(gamePanel.getMyPlayer().isMyTurn()){
-                    Mapper.sendMarkCell(gamePanel.getMyPlayer().getShape(), cell.getRow(), cell.getCol());
-                }
+                Mapper.markCellRequest(gamePanel.getMyPlayer().getShape(), cell.getRow(), cell.getCol());
             }
         });
     }
@@ -37,8 +35,8 @@ public class BoardPanel extends JPanel {
     private void makeBoard() {
         cells = new Cell[Configs.boardRows][Configs.boardCols];
 
-        for(int i = 0; i < Configs.boardCols; i++){
-            for(int j = 0; j < Configs.boardRows; j++) {
+        for (int i = 0; i < Configs.boardCols; i++) {
+            for (int j = 0; j < Configs.boardRows; j++) {
                 cells[i][j] = new Cell(i, j);
                 makeMouseListener(cells[i][j]);
             }
@@ -53,8 +51,8 @@ public class BoardPanel extends JPanel {
     }
 
     private void drawBoard() {
-        for(int i = 0; i < Configs.boardCols; i++){
-            for(int j = 0; j < Configs.boardRows; j++) {
+        for (int i = 0; i < Configs.boardCols; i++) {
+            for (int j = 0; j < Configs.boardRows; j++) {
                 cells[j][i].setBounds(i * Configs.cellWidth, j * Configs.cellHeight,
                         Configs.cellWidth, Configs.cellHeight);
                 add(cells[j][i]);
@@ -62,13 +60,13 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    public void mark(Character character, int i, int j){
+    public void mark(char character, int i, int j) {
         cells[i][j].setValue(character);
     }
 
-    public void updateBoard(char[][] board){
-        for(int i = 0; i < Configs.boardRows; i++){
-            for(int j = 0; j < Configs.boardCols; j++){
+    public void updateBoard(char[][] board) {
+        for (int i = 0; i < Configs.boardRows; i++) {
+            for (int j = 0; j < Configs.boardCols; j++) {
                 cells[i][j].setValue(board[i][j]);
             }
         }

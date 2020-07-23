@@ -1,12 +1,11 @@
-package xo.data;
+package xo.server.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import xo.model.Account;
+import xo.server.model.AccountDetails;
 import xo.util.AbstractAdapter;
 import xo.util.XOException;
 
@@ -14,13 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Data {
-    private static Map<String, Account> accounts = new HashMap<>();
+    private static Map<String, AccountDetails> accounts = new HashMap<>();
 
-    public static void setAccounts(Map<String, Account> accounts) {
+    public static void setAccounts(Map<String, AccountDetails> accounts) {
         Data.accounts = accounts;
     }
 
-    public static Map<String, Account> getAccounts() {
+    public static Map<String, AccountDetails> getAccounts() {
         return accounts;
     }
 
@@ -28,7 +27,7 @@ public class Data {
         if (!accounts.containsKey(username)) {
             throw new XOException("This username does not exists!");
         }
-        if (!accounts.get(username).getPassword().equals(password)) {
+        if (!accounts.get(username).getAccount().getPassword().equals(password)) {
             throw new XOException("Password is not correct!");
         }
     }
@@ -37,10 +36,10 @@ public class Data {
         if (accounts.containsKey(username)) {
             throw new XOException("This username is already exists!");
         }
-        accounts.put(username, new Account(accounts.size(), username, password));
+        accounts.put(username, new AccountDetails(new Account(accounts.size(), username, password), null, null));
     }
 
-    public static Account getAccount(String username) {
+    public static AccountDetails getAccountDetails(String username) {
         return accounts.get(username);
     }
 
@@ -56,7 +55,12 @@ public class Data {
         return gson;
     }
 
-    public synchronized static ObjectMapper getMapper(){
+    public synchronized static ObjectMapper getDataMapper(){
+        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+        return mapper;
+    }
+
+    public synchronized static ObjectMapper getNetworkMapper(){
         ObjectMapper mapper = new ObjectMapper();
         mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.EVERYTHING);
         return mapper;

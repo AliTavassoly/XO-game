@@ -7,7 +7,7 @@ import java.io.Serializable;
 //@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "BTRFSPhysicalLocationItem")
 public class Player implements Serializable {
     private String username;
-    private Character shape;
+    private char shape;
     private boolean isMyTurn;
 
     public String getUsername() {
@@ -17,10 +17,10 @@ public class Player implements Serializable {
         this.username = username;
     }
 
-    public Character getShape() {
+    public char getShape() {
         return shape;
     }
-    public void setShape(Character shape) {
+    public void setShape(char shape) {
         this.shape = shape;
     }
 
@@ -35,7 +35,7 @@ public class Player implements Serializable {
 
     }
 
-    public Player(String username, Character shape, boolean isMyTurn){
+    public Player(String username, char shape, boolean isMyTurn){
         this.username = username;
         this.shape = shape;
         this.isMyTurn = isMyTurn;
