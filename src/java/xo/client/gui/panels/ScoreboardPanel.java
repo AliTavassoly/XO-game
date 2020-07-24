@@ -36,12 +36,15 @@ public class ScoreboardPanel extends JPanel {
 
     private void makeList() {
         listPanel = new JPanel();
-        listPanel.setPreferredSize(new Dimension(Configs.gameFrameWidth - 300, Configs.gameFrameWidth - 200));
-        listPanel.setVisible(true);
+        listPanel.setPreferredSize(new Dimension(Configs.scoreBoardListPanelWidth, Configs.scoreBoardListPanelHeight));
 
         scrollPane = new JScrollPane(listPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBounds(Configs.gameFrameWidth / 2 - Configs.scoreBoardListPanelWidth / 2,
+                50,
+                Configs.scoreBoardListPanelWidth, Configs.scoreBoardListPanelHeight);
+        scrollPane.setPreferredSize(new Dimension(Configs.scoreBoardListPanelWidth, Configs.scoreBoardListPanelHeight));
     }
 
     private void configPanel(){
@@ -64,7 +67,7 @@ public class ScoreboardPanel extends JPanel {
     }
 
     private void makeButtons(){
-        backButton = new XOButton("Cancel");
+        backButton = new XOButton("Back");
         backButton.setFont(GameFrame.getCustomFont(0));
 
         backButton.addActionListener(new ActionListener() {
@@ -99,6 +102,8 @@ public class ScoreboardPanel extends JPanel {
 
         listPanel.removeAll();
         listPanel.setLayout(new GridBagLayout());
+        listPanel.setPreferredSize(new Dimension(Configs.scoreBoardListPanelWidth,
+                accounts.size() * 26));
         GridBagConstraints grid = new GridBagConstraints();
 
         grid.gridx = 0;
@@ -149,20 +154,5 @@ public class ScoreboardPanel extends JPanel {
                 onlineLabel.setForeground(Color.RED);
             listPanel.add(onlineLabel, grid);
         }
-
-        grid.gridx = 0;
-        grid.gridy = accounts.size() + 1;
-        grid.insets = new Insets(0, 0, 170, 0);
-        listPanel.add(new JLabel(), grid);
-
-        grid.gridx = 1;
-        grid.gridy = accounts.size() + 1;
-        grid.insets = new Insets(0, 0, 170, 0);
-        listPanel.add(new JLabel(), grid);
-
-        grid.gridx = 2;
-        grid.gridy = accounts.size() + 1;
-        grid.insets = new Insets(0, 0, 170, 0);
-        listPanel.add(new JLabel(), grid);
     }
 }

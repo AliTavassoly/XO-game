@@ -5,6 +5,8 @@
   "cellHeight": 35,
   "gameFrameWidth": 500,
   "gameFrameHeight": 500,
+  "scoreBoardListPanelWidth": 300,
+  "scoreBoardListPanelHeight": 300,
   "shapeInGameWidth": 70,
   "shapeInGameHeight": 70,
   "winCondition": 4

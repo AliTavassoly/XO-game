@@ -15,6 +15,9 @@ public class Configs {
     public static int shapeInGameWidth;
     public static int shapeInGameHeight;
 
+    public static int scoreBoardListPanelWidth;
+    public static int scoreBoardListPanelHeight;
+
     public static int winCondition;
 
     static public void setConfigs(Map<String, Integer> configs) {
@@ -29,6 +32,9 @@ public class Configs {
 
         shapeInGameWidth = configs.get("shapeInGameWidth");
         shapeInGameHeight =  configs.get("shapeInGameHeight");
+
+        scoreBoardListPanelWidth = configs.get("scoreBoardListPanelWidth");
+        scoreBoardListPanelHeight =  configs.get("scoreBoardListPanelHeight");
 
         winCondition = configs.get("winCondition");
     }
