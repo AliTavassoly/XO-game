@@ -1,7 +1,5 @@
 package xo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 public class AccountInfo implements Comparable<AccountInfo>{
     private String username;
     private boolean isOnline;

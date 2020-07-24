@@ -49,7 +49,7 @@ public class XOServer extends Thread {
         return instance;
     }
 
-    public static void login(String username, String password, ClientHandler clientHandler) throws XOException {
+    public void login(String username, String password, ClientHandler clientHandler) throws XOException {
         Data.checkAccount(username, password);
 
         XOServer.getInstance().addAccountToServer(username, clientHandler);
@@ -57,7 +57,7 @@ public class XOServer extends Thread {
         Mapper.loginResponse(username, clientHandler);
     }
 
-    public static void register(String username, String password, ClientHandler clientHandler) throws XOException {
+    public void register(String username, String password, ClientHandler clientHandler) throws XOException {
         Data.addAccountDetail(username, password);
 
         XOServer.getInstance().addAccountToServer(username, clientHandler);
@@ -67,7 +67,7 @@ public class XOServer extends Thread {
         Mapper.registerResponse(username, clientHandler);
     }
 
-    public static void logout(ClientHandler clientHandler) {
+    public void logout(ClientHandler clientHandler) {
         XOServer.getInstance().clientHandlerDisconnected(clientHandler.getAuthToken());
         Mapper.logoutResponse(clientHandler);
     }

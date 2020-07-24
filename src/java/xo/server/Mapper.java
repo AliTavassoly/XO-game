@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Mapper {
     public static void loginRequest(String username, String password, ClientHandler clientHandler) {
         try {
-            XOServer.login(username, password, clientHandler);
+            XOServer.getInstance().login(username, password, clientHandler);
         } catch (XOException e) {
             e.printStackTrace();
         }
@@ -30,7 +30,7 @@ public class Mapper {
 
     public static void registerRequest(String username, String password, ClientHandler clientHandler) {
         try {
-            XOServer.register(username, password, clientHandler);
+            XOServer.getInstance().register(username, password, clientHandler);
         } catch (XOException e) {
             e.printStackTrace();
         }
@@ -44,7 +44,7 @@ public class Mapper {
     }
 
     public static void logoutRequest(ClientHandler clientHandler) {
-        XOServer.logout(clientHandler);
+        XOServer.getInstance().logout(clientHandler);
     }
 
     public static void logoutResponse(ClientHandler clientHandler) {
