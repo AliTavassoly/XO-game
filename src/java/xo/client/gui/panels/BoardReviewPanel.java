@@ -1,13 +1,10 @@
 package xo.client.gui.panels;
 
-import xo.client.Mapper;
+import xo.client.configs.Configs;
 import xo.client.gui.model.Cell;
-import xo.server.data.Configs;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class BoardReviewPanel extends JPanel {
     private Cell[][] cells;

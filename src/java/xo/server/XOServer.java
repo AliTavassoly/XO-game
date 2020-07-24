@@ -52,9 +52,7 @@ public class XOServer extends Thread {
     public static void login(String username, String password, ClientHandler clientHandler) throws XOException {
         Data.checkAccount(username, password);
 
-        XOServer.getInstance().addAccountToServer(username,
-                Data.getAccountDetails(username).getAccount().getAuthToken(),
-                clientHandler);
+        XOServer.getInstance().addAccountToServer(username, clientHandler);
 
         Mapper.loginResponse(username, clientHandler);
     }
@@ -62,8 +60,7 @@ public class XOServer extends Thread {
     public static void register(String username, String password, ClientHandler clientHandler) throws XOException {
         Data.addAccountDetail(username, password);
 
-        XOServer.getInstance().addAccountToServer(username, Data.getAccountDetails(username).getAccount().getAuthToken(),
-                clientHandler);
+        XOServer.getInstance().addAccountToServer(username, clientHandler);
 
         DataBase.save();
 
@@ -127,8 +124,9 @@ public class XOServer extends Thread {
         removeGameWaiter(authToken);
     }
 
-    public synchronized void addAccountToServer(String username, String authToken, ClientHandler clientHandler) {
-        Data.getAccountDetails(username).getAccount().setAuthToken(AuthToken.generateAuthToken());
+    public synchronized void addAccountToServer(String username, ClientHandler clientHandler) {
+        String authToken = AuthToken.generateAuthToken();
+        Data.getAccountDetails(username).getAccount().setAuthToken(authToken);
         Data.getAccountDetails(username).setClientHandler(clientHandler);
 
         clientHandler.setAuthToken(authToken);

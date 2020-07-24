@@ -1,8 +1,8 @@
 package xo.client.gui.panels;
 
 import xo.client.Mapper;
+import xo.client.configs.Configs;
 import xo.client.gui.model.Cell;
-import xo.server.data.Configs;
 
 import javax.swing.*;
 import java.awt.*;

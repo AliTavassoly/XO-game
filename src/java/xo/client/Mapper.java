@@ -92,7 +92,6 @@ public class Mapper {
         XOClient.getInstance().updateAccount(account);
     }
 
-
     public static void startUpdateAccountInfo(){
         Packet packet = new Packet("startUpdateAccountInfo", null);
         packet.setAuthToken(XOClient.getInstance().currentAccount.getAuthToken());

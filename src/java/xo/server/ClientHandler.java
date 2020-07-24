@@ -67,6 +67,8 @@ public class ClientHandler extends Thread {
 
             objectString = Data.getNetworkMapper().writeValueAsString(packet);
 
+            System.out.println("From server: " + objectString);
+
             new PrintStream(socket.getOutputStream()).println(objectString);
         } catch (Exception e) {
             e.printStackTrace();

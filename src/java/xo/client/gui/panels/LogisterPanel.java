@@ -1,10 +1,10 @@
 package xo.client.gui.panels;
 
 import xo.client.Mapper;
+import xo.client.configs.Configs;
 import xo.client.gui.GameFrame;
 import xo.client.gui.xocontrols.XOButton;
 import xo.client.gui.xocontrols.XOJTextField;
-import xo.server.data.Configs;
 import xo.client.gui.util.ImageLoader;
 
 import javax.swing.*;
@@ -24,8 +24,6 @@ public class LogisterPanel extends JPanel {
     private XOButton registerButton;
 
     private static BufferedImage background;
-
-    private String error;
 
     public LogisterPanel(){
         configPanel();

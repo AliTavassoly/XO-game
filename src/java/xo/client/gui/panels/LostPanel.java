@@ -1,7 +1,7 @@
 package xo.client.gui.panels;
 
+import xo.client.configs.Configs;
 import xo.client.gui.util.ImageLoader;
-import xo.server.data.Configs;
 
 import javax.swing.*;
 import java.awt.*;

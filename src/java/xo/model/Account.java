@@ -2,7 +2,6 @@ package xo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(value = { "authToken" })
 public class Account {
     private int id;
 

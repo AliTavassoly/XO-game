@@ -1,7 +1,7 @@
 package xo.client.gui.model;
 
+import xo.client.configs.Configs;
 import xo.client.gui.xocontrols.XOButton;
-import xo.server.data.Configs;
 import xo.client.gui.util.ImageLoader;
 
 import java.awt.*;

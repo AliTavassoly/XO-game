@@ -1,9 +1,9 @@
 package xo.client.gui.panels;
 
 import xo.client.Mapper;
+import xo.client.configs.Configs;
 import xo.client.gui.GameFrame;
 import xo.client.gui.xocontrols.XOButton;
-import xo.server.data.Configs;
 import xo.model.Player;
 
 import javax.swing.*;
