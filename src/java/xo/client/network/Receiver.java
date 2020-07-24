@@ -27,7 +27,7 @@ public class Receiver extends Thread {
 
                 ObjectMapper mapper = Data.getNetworkMapper();
 
-                Packet packet = (Packet) mapper.readValue(message, Object.class);
+                Packet packet = mapper.readValue(message, Packet.class);
 
                 Mapper.invokeFunction(packet);
             }

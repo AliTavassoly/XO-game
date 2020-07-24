@@ -1,7 +1,6 @@
 package xo.client.gui;
 
 import xo.client.gui.panels.LogisterPanel;
-import xo.client.gui.panels.review.GameReviewerPanel;
 import xo.server.data.Configs;
 import xo.client.gui.util.FontLoader;
 

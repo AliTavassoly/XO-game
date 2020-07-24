@@ -1,4 +1,4 @@
-package xo.client.gui.panels.review;
+package xo.client.gui.panels;
 
 import xo.client.Mapper;
 import xo.client.gui.model.Cell;

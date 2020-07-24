@@ -1,18 +1,13 @@
 package xo.client;
 
 import xo.client.gui.GameFrame;
-import xo.client.gui.panels.GamePanel;
-import xo.client.gui.panels.LogisterPanel;
-import xo.client.gui.panels.MainMenuPanel;
-import xo.client.gui.panels.WaitingPanel;
-import xo.client.gui.panels.endgame.LostPanel;
-import xo.client.gui.panels.endgame.WonPanel;
+import xo.client.gui.panels.*;
 import xo.client.network.Receiver;
 import xo.client.network.Sender;
 import xo.model.Account;
+import xo.model.AccountInfo;
 import xo.model.Packet;
 import xo.model.Player;
-import xo.server.ClientHandler;
 import xo.util.timer.XODelayTask;
 import xo.util.timer.XODelayTimer;
 
@@ -27,6 +22,8 @@ public class XOClient {
 
     public Account currentAccount;
     public GamePanel currentGamePanel;
+    public ScoreboardPanel scoreboardPanel;
+    public ArrayList<AccountInfo> accountInfo;
 
     private Socket socket;
     private Receiver receiver;
@@ -103,6 +100,10 @@ public class XOClient {
         reviewBoards.add(board);
     }
 
+    public void updateAccount(Account account) {
+        XOClient.getInstance().currentAccount = account;
+    }
+
     public void newGame(Player myPlayer, Player enemyPlayer) {
         GamePanel gamePanel = new GamePanel(myPlayer, enemyPlayer);
         currentGamePanel = gamePanel;
@@ -158,5 +159,14 @@ public class XOClient {
 
     public static void sendPacket(Packet packet){
         getInstance().sender.sendPacket(packet);
+    }
+
+    public void statusResponse() {
+        GameFrame.switchPanelTo(new StatusPanel());
+    }
+
+    public void updateAccountInfo(ArrayList<AccountInfo> accounts) {
+        XOClient.getInstance().accountInfo = accounts;
+        this.scoreboardPanel.updateList(accounts);
     }
 }

@@ -1,5 +1,7 @@
 package xo.server.data;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
@@ -9,6 +11,7 @@ import xo.server.model.AccountDetail;
 import xo.util.AbstractAdapter;
 import xo.util.XOException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +46,14 @@ public class Data {
         return accountsDetails.get(username);
     }
 
+    public static ArrayList<AccountDetail> getAccountDetails() {
+        ArrayList<AccountDetail> accounts = new ArrayList<>();
+        for(AccountDetail accountDetail: accountsDetails.values()){
+            accounts.add(accountDetail);
+        }
+        return accounts;
+    }
+
     public synchronized static Gson getGson(){
         GsonBuilder gsonBuilder = new GsonBuilder();
 
@@ -57,12 +68,14 @@ public class Data {
 
     public synchronized static ObjectMapper getDataMapper(){
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         return mapper;
     }
 
     public synchronized static ObjectMapper getNetworkMapper(){
         ObjectMapper mapper = new ObjectMapper();
         mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.EVERYTHING);
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         return mapper;
     }
 }

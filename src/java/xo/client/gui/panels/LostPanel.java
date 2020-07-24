@@ -1,4 +1,4 @@
-package xo.client.gui.panels.endgame;
+package xo.client.gui.panels;
 
 import xo.client.gui.util.ImageLoader;
 import xo.server.data.Configs;

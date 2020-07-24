@@ -1,10 +1,14 @@
 package xo.server;
 
 import xo.model.Account;
+import xo.model.AccountInfo;
 import xo.model.Player;
 import xo.server.data.Data;
 import xo.server.data.DataBase;
 import xo.server.logic.Game;
+import xo.server.model.AccountDetail;
+import xo.server.model.AccountInfoUpdater;
+import xo.server.model.UpdateWaiter;
 import xo.util.AuthToken;
 import xo.util.XOException;
 
@@ -22,11 +26,14 @@ public class XOServer extends Thread {
     private Map<String, String> keys; // AuthToken / Username
     private ArrayList<String> waitRoom;
 
+    private ArrayList<UpdateWaiter> updaterWaiters;
+
     private XOServer(int serverPort) {
         try {
             this.serverSocket = new ServerSocket(serverPort);
             this.keys = new HashMap<>();
             this.waitRoom = new ArrayList<>();
+            this.updaterWaiters = new ArrayList<>();
 
             System.out.println("Server Started at: " + serverPort);
         } catch (IOException e) {
@@ -34,18 +41,16 @@ public class XOServer extends Thread {
         }
     }
 
-    public static XOServer makeNewInstance(int serverPort){
+    public static XOServer makeNewInstance(int serverPort) {
         return instance = new XOServer(serverPort);
     }
 
-    public static XOServer getInstance(){
+    public static XOServer getInstance() {
         return instance;
     }
 
     public static void login(String username, String password, ClientHandler clientHandler) throws XOException {
         Data.checkAccount(username, password);
-        Data.getAccountDetails(username).getAccount().setAuthToken(AuthToken.generateAuthToken());
-        Data.getAccountDetails(username).setClientHandler(clientHandler);
 
         XOServer.getInstance().addAccountToServer(username,
                 Data.getAccountDetails(username).getAccount().getAuthToken(),
@@ -56,8 +61,6 @@ public class XOServer extends Thread {
 
     public static void register(String username, String password, ClientHandler clientHandler) throws XOException {
         Data.addAccountDetail(username, password);
-        Data.getAccountDetails(username).getAccount().setAuthToken(AuthToken.generateAuthToken());
-        Data.getAccountDetails(username).setClientHandler(clientHandler);
 
         XOServer.getInstance().addAccountToServer(username, Data.getAccountDetails(username).getAccount().getAuthToken(),
                 clientHandler);
@@ -67,13 +70,14 @@ public class XOServer extends Thread {
         Mapper.registerResponse(username, clientHandler);
     }
 
-    public static void logout(ClientHandler clientHandler){
+    public static void logout(ClientHandler clientHandler) {
+        XOServer.getInstance().clientHandlerDisconnected(clientHandler.getAuthToken());
         Mapper.logoutResponse(clientHandler);
     }
 
-    public synchronized void addNewGameWaiter(String username, ClientHandler clientHandler){
+    public synchronized void addNewGameWaiter(String username, ClientHandler clientHandler) {
         waitRoom.add(username);
-        if(waitRoom.size() >= 2){
+        if (waitRoom.size() >= 2) {
 
             String user0 = waitRoom.remove(0);
             String user1 = waitRoom.remove(0);
@@ -93,7 +97,7 @@ public class XOServer extends Thread {
         }
     }
 
-    public synchronized void removeGameWaiter(String authToken){
+    public synchronized void removeGameWaiter(String authToken) {
         waitRoom.remove(keys.get(authToken));
     }
 
@@ -118,16 +122,24 @@ public class XOServer extends Thread {
         Data.getAccountDetails(username).setClientHandler(null);
         Data.getAccountDetails(username).setCurrentGame(null);
 
+        updateWaiters(new UpdateWaiter.UpdaterType[]{UpdateWaiter.UpdaterType.ACCOUNT_INFO});
+
         removeGameWaiter(authToken);
     }
 
-    public synchronized void addAccountToServer(String username, String authToken, ClientHandler clientHandler){
+    public synchronized void addAccountToServer(String username, String authToken, ClientHandler clientHandler) {
+        Data.getAccountDetails(username).getAccount().setAuthToken(AuthToken.generateAuthToken());
+        Data.getAccountDetails(username).setClientHandler(clientHandler);
+
         clientHandler.setAuthToken(authToken);
+
+        updateWaiters(new UpdateWaiter.UpdaterType[]{UpdateWaiter.UpdaterType.ACCOUNT_INFO});
+
         XOServer.getInstance().keys.put(authToken, username);
     }
 
-    public synchronized void checkAuthToken(String autoToken) throws XOException{
-        if(autoToken != null && !keys.containsKey(autoToken))
+    public synchronized void checkAuthToken(String autoToken) throws XOException {
+        if (autoToken != null && !keys.containsKey(autoToken))
             throw new XOException("AuthToken is not correct!");
     }
 
@@ -143,25 +155,25 @@ public class XOServer extends Thread {
             Mapper.markCellResponse(game.getBoard(), Data.getAccountDetails(user1).getClientHandler());
 
             afterMarkCell(game);
-        } catch (XOException e){
+        } catch (XOException e) {
             e.printStackTrace();
         }
     }
 
-    public void afterMarkCell(Game game){
+    public void afterMarkCell(Game game) {
         String user0 = game.getPlayer0().getUsername();
         String user1 = game.getPlayer1().getUsername();
 
         ClientHandler clientHandler0 = Data.getAccountDetails(user0).getClientHandler();
         ClientHandler clientHandler1 = Data.getAccountDetails(user1).getClientHandler();
 
-        if(game.isGameEnded()){
-            if(game.whoWonGame() == game.getPlayer0().getShape())
+        if (game.isGameEnded()) {
+            if (game.whoWonGame() == game.getPlayer0().getShape())
                 wonGame(clientHandler0);
             else
                 lostGame(clientHandler0);
 
-            if(game.whoWonGame() == game.getPlayer1().getShape())
+            if (game.whoWonGame() == game.getPlayer1().getShape())
                 wonGame(clientHandler1);
             else
                 lostGame(clientHandler1);
@@ -182,7 +194,7 @@ public class XOServer extends Thread {
         ClientHandler clientHandler0 = Data.getAccountDetails(user0).getClientHandler();
         ClientHandler clientHandler1 = Data.getAccountDetails(user1).getClientHandler();
 
-        if(clientHandler.getAuthToken().equals(clientHandler0.getAuthToken())){
+        if (clientHandler.getAuthToken().equals(clientHandler0.getAuthToken())) {
             lostGame(clientHandler0);
             wonGame(clientHandler1);
         } else {
@@ -191,7 +203,7 @@ public class XOServer extends Thread {
         }
     }
 
-    private void wonGame(ClientHandler clientHandler){
+    private void wonGame(ClientHandler clientHandler) {
         Account account = Data.getAccountDetails(keys.get(clientHandler.getAuthToken())).getAccount();
 
         account.setTotalGames(account.getTotalGames() + 1);
@@ -199,10 +211,12 @@ public class XOServer extends Thread {
         account.setPoint(account.getWinGames() - account.getLostGames());
         DataBase.save();
 
+        updateWaiters(new UpdateWaiter.UpdaterType[]{UpdateWaiter.UpdaterType.ACCOUNT_INFO});
+
         Mapper.wonGame(clientHandler);
     }
 
-    private void lostGame(ClientHandler clientHandler){
+    private void lostGame(ClientHandler clientHandler) {
         Account account = Data.getAccountDetails(keys.get(clientHandler.getAuthToken())).getAccount();
 
         account.setTotalGames(account.getTotalGames() + 1);
@@ -210,6 +224,61 @@ public class XOServer extends Thread {
         account.setPoint(account.getWinGames() - account.getLostGames());
         DataBase.save();
 
+        updateWaiters(new UpdateWaiter.UpdaterType[]{UpdateWaiter.UpdaterType.ACCOUNT_INFO});
+
         Mapper.lostGame(clientHandler);
+    }
+
+    public void updateAccountRequest(ClientHandler clientHandler) {
+        Account account = Data.getAccountDetails(keys.get(clientHandler.getAuthToken())).getAccount();
+        Mapper.updateAccountResponse(account, clientHandler);
+    }
+
+    public void statusRequest(ClientHandler clientHandler) {
+        Account account = Data.getAccountDetails(keys.get(clientHandler.getAuthToken())).getAccount();
+        Mapper.statusResponse(account, clientHandler);
+    }
+
+    public synchronized void startUpdateAccountInfo(ClientHandler clientHandler) {
+        this.updaterWaiters.add(new AccountInfoUpdater(
+                keys.get(clientHandler.getAuthToken()),
+                UpdateWaiter.UpdaterType.ACCOUNT_INFO,
+                clientHandler));
+
+        updateAccountInfo(clientHandler);
+    }
+
+    public synchronized void stopUpdateAccountInfo(ClientHandler clientHandler) {
+        for (UpdateWaiter updateWaiter : this.updaterWaiters) {
+            if (updateWaiter.getUsername().equals(keys.get(clientHandler.getAuthToken())) &&
+                    updateWaiter.updaterType() == UpdateWaiter.UpdaterType.ACCOUNT_INFO) {
+                this.updaterWaiters.remove(updateWaiter);
+                break;
+            }
+        }
+    }
+
+    public void updateAccountInfo(ClientHandler clientHandler) {
+        ArrayList<AccountInfo> accounts = new ArrayList<>();
+        for (AccountDetail accountDetail : Data.getAccountDetails()) {
+            AccountInfo accountInfo = new AccountInfo(
+                    accountDetail.getAccount().getUsername(),
+                    accountDetail.getAccount().getPoint(),
+                    accountDetail.getClientHandler() != null);
+            accounts.add(accountInfo);
+        }
+        Mapper.updateAccountInfo(accounts, clientHandler);
+    }
+
+    public void updateWaiters(UpdateWaiter.UpdaterType[] updaterTypes) {
+        if(updaterTypes == null)
+            return;
+        for(UpdateWaiter updateWaiter: this.updaterWaiters){
+            for(int i = 0; i < updaterTypes.length; i++){
+                if(updateWaiter.updaterType() == updaterTypes[i]){
+                    updateWaiter.update();
+                }
+            }
+        }
     }
 }

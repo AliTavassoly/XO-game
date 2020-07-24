@@ -1,6 +1,7 @@
 package xo.server;
 
 import xo.client.XOClient;
+import xo.model.AccountInfo;
 import xo.server.data.Data;
 import xo.model.Account;
 import xo.model.Packet;
@@ -9,6 +10,7 @@ import xo.util.XOException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class Mapper {
     public static void loginRequest(String username, String password, ClientHandler clientHandler) {
@@ -74,6 +76,36 @@ public class Mapper {
 
     public static void cancelWaitingForGameResponse(ClientHandler clientHandler) {
         Packet packet = new Packet("cancelWaitingForGameResponse", new Object[]{});
+        clientHandler.sendPacket(packet);
+    }
+
+    public static void startUpdateAccountInfo(ClientHandler clientHandler){
+        XOServer.getInstance().startUpdateAccountInfo(clientHandler);
+    }
+
+    public static void updateAccountInfo(ArrayList<AccountInfo> accounts, ClientHandler clientHandler){
+        Packet packet = new Packet("updateAccountInfo", new Object[]{accounts});
+        clientHandler.sendPacket(packet);
+    }
+
+    public static void stopUpdateAccountInfo(ClientHandler clientHandler){
+        XOServer.getInstance().stopUpdateAccountInfo(clientHandler);
+    }
+
+    public static void updateAccountResponse(Account account, ClientHandler clientHandler) {
+        Packet packet = new Packet("updateAccountResponse", new Object[]{account});
+        clientHandler.sendPacket(packet);
+    }
+
+    public static void statusRequest(ClientHandler clientHandler) {
+        XOServer.getInstance().statusRequest(clientHandler);
+    }
+
+    public static void statusResponse(Account account, ClientHandler clientHandler) {
+        Packet packet = new Packet("updateAccountResponse", new Object[]{account});
+        clientHandler.sendPacket(packet);
+
+        packet = new Packet("statusResponse", new Object[]{});
         clientHandler.sendPacket(packet);
     }
 

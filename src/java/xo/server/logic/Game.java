@@ -92,7 +92,7 @@ public class Game {
                     currentI++;
                     currentJ++;
                 }
-                if(flag)
+                if(flag && board[i][j] != '.')
                     return board[i][j];
             }
         }
@@ -113,7 +113,7 @@ public class Game {
                     currentI++;
                     currentJ--;
                 }
-                if(flag)
+                if(flag && board[i][j] != '.')
                     return board[i][j];
             }
         }

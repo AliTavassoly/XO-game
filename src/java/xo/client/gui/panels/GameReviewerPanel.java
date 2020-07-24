@@ -1,9 +1,6 @@
-package xo.client.gui.panels.review;
+package xo.client.gui.panels;
 
 import xo.client.gui.GameFrame;
-import xo.client.gui.panels.MainMenuPanel;
-import xo.client.gui.panels.ShapePanel;
-import xo.client.gui.panels.review.BoardReviewPanel;
 import xo.client.gui.xocontrols.XOButton;
 import xo.model.Player;
 import xo.server.data.Configs;
